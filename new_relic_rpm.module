@@ -76,7 +76,7 @@ function new_relic_rpm_cron() {
  * Sets New Relic error and exceptions handler.
  */
 function new_relic_rpm_init() {
-  if (variable_get('new_relic_rpm_override_exception_handler', FALSE)) {
+  if (variable_get('new_relic_rpm_override_exception_handler', FALSE) && function_exists('newrelic_notice_error')) {
     set_exception_handler('_new_relic_rpm_exception_handler');
   }
 }
@@ -152,6 +152,11 @@ function new_relic_rpm_boot() {
  */
 function new_relic_rpm_watchdog(array $log_entry) {
   global $base_url;
+
+  // Don't do anything if the new relic extension is not available.
+  if (!function_exists('newrelic_notice_error')) {
+    return;
+  }
 
   // Skip if already logged.
   if (!empty($log_entry['variables']['new_relic_already_logged'])) {
