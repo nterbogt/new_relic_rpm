@@ -180,7 +180,7 @@ function new_relic_rpm_watchdog(array $log_entry) {
     '@request_uri' => $log_entry['request_uri'],
     '@referer_uri' => $log_entry['referer'],
     '@uid' => $log_entry['uid'],
-    '@name' => $log_entry['user']->name,
+    '@name' => user_format_name($log_entry['user']),
     '@message' => strip_tags(strtr($log_entry['message'], is_array($log_entry['variables']) ? $log_entry['variables'] : array())),
   ));
 
