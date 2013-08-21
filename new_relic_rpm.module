@@ -14,6 +14,7 @@ function new_relic_rpm_menu() {
     'page callback' => 'drupal_get_form',
     'page arguments' => array('new_relic_rpm_deploy'),
     'access arguments' => array('create new relic rpm deployments'),
+    'type' => MENU_LOCAL_TASK,
     'file' => 'new_relic_rpm.settings.inc',
   );
   $items['admin/config/development/new-relic-rpm'] = array(
