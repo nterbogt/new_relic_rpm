@@ -13,6 +13,10 @@ function new_relic_rpm_drush_init() {
     // Make sure we have access to the needed functions.
     require_once dirname(__FILE__) . '/new_relic_rpm.module';
 
+    if (!new_relic_rpm_extension_installed()) {
+      return;
+    }
+
     // Add custom paramter, telling the drush command executed.
     $command = drush_get_command();
     $drush_command = array_merge(array($command['command']), $command['arguments']);
