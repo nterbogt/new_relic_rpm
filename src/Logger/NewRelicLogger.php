@@ -51,7 +51,7 @@ class NewRelicLogger implements LoggerInterface {
     }
 
     // Check if the severity is supposed to be logged.
-    if (!in_array($level, \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_watchdog_severities'))) {
+    if (!in_array($level, \Drupal::config('new_relic_rpm.settings')->get('watchdog_severities'))) {
       return;
     }
 

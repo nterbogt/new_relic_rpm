@@ -23,6 +23,6 @@ function new_relic_rpm_drush_init() {
     newrelic_add_custom_parameter('Drush command', implode(' ', $drush_command));
 
     // Set job state.
-    new_relic_rpm_set_job_state(\Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_track_drush'));
+    new_relic_rpm_set_job_state(\Drupal::config('new_relic_rpm.settings')->get('track_drush'));
   }
 }

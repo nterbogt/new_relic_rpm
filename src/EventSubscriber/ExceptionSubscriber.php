@@ -28,7 +28,7 @@ class ExceptionSubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function onException(GetResponseForExceptionEvent $event) {
-    if (variable_get('new_relic_rpm_override_exception_handler', FALSE) && function_exists('newrelic_notice_error')) {
+    if (variable_get('override_exception_handler', FALSE) && function_exists('newrelic_notice_error')) {
       // Don't log http exceptions.
       if ($event->getException() instanceof HttpExceptionInterface) {
         return;

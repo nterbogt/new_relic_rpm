@@ -10,7 +10,7 @@
 function new_relic_rpm_settings($form, &$form_state) {
   $form = array();
 
-  $form['new_relic_rpm_track_drush'] = array(
+  $form['track_drush'] = array(
     '#type' => 'select',
     '#title' => t('Drush transactions'),
     '#description' => t('How do you wish RPM to track drush commands?'),
@@ -19,10 +19,10 @@ function new_relic_rpm_settings($form, &$form_state) {
       'bg' => t('Track as background tasks'),
       'norm' => t('Track normally'),
     ),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_track_drush'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('track_drush'),
   );
 
-  $form['new_relic_rpm_track_cron'] = array(
+  $form['track_cron'] = array(
     '#type' => 'select',
     '#title' => t('Cron transactions'),
     '#description' => t('How do you wish RPM to track cron tasks?'),
@@ -31,10 +31,10 @@ function new_relic_rpm_settings($form, &$form_state) {
       'bg' => t('Track as background tasks'),
       'norm' => t('Track normally'),
     ),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_track_cron'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('track_cron'),
   );
 
-  $form['new_relic_rpm_module_deployment'] = array(
+  $form['module_deployment'] = array(
     '#type' => 'select',
     '#title' => t('Track module activation as deployment'),
     '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a module is enabled or disabled. This will help you track before and after statistics.'),
@@ -42,58 +42,58 @@ function new_relic_rpm_settings($form, &$form_state) {
       '1' => t('Enable'),
       '0' => t('Disable'),
     ),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_module_deployment'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('module_deployment'),
   );
 
-  $form['new_relic_rpm_ignore_urls'] = array(
+  $form['ignore_urls'] = array(
     '#type' => 'textarea',
     '#wysiwyg' => FALSE,
     '#title' => t('Ignore URLs'),
     '#description' => t('Enter URLs you wish New Relic RPM to ignore. Enter one URL per line.'),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_ignore_urls'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('ignore_urls'),
   );
 
-  $form['new_relic_rpm_bg_urls'] = array(
+  $form['bg_urls'] = array(
     '#type' => 'textarea',
     '#wysiwyg' => FALSE,
     '#title' => t('Background URLs'),
     '#description' => t('Enter URLs you wish to have tracked as background tasks. Enter one URL per line.'),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_bg_urls'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('bg_urls'),
   );
 
-  $form['new_relic_rpm_exclusive_urls'] = array(
+  $form['exclusive_urls'] = array(
     '#type' => 'textarea',
     '#wysiwyg' => FALSE,
     '#title' => t('Exclusive URLs'),
     '#description' => t('Enter URLs you wish exclusively track. This is usefull for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_exclusive_urls'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('exclusive_urls'),
   );
 
-  $form['new_relic_rpm_api_key'] = array(
+  $form['api_key'] = array(
     '#type' => 'textfield',
     '#title' => t('API Key'),
     '#description' => t('Enter your New Relic API key if you wish to view reports and analysis within Drupal'),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_api_key'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('api_key'),
   );
 
   // @FIXME
 // Could not extract the default value because it is either indeterminate, or
 // not scalar. You'll need to provide a default value in
 // config/install/new_relic_rpm.settings.yml and config/schema/new_relic_rpm.schema.yml.
-$form['new_relic_rpm_watchdog_severities'] = array(
+$form['watchdog_severities'] = array(
     '#type' => 'select',
     '#multiple' => TRUE,
     '#title' => t('Forward watchdog messages'),
     '#description' => t('Select which watchdog severities should be forwarded to New Relic API as errors.'),
     '#options' => watchdog_severity_levels(),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_watchdog_severities'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('watchdog_severities'),
   );
 
-  $form['new_relic_rpm_override_exception_handler'] = array(
+  $form['override_exception_handler'] = array(
     '#type' => 'checkbox',
     '#title' => t('Override exception handler'),
     '#description' => t('Check to override default Drupal exception handler and to have exceptions passed to New Relic'),
-    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_override_exception_handler'),
+    '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('override_exception_handler'),
   );
 
   return system_settings_form($form);

@@ -10,7 +10,7 @@
 function new_relic_rpm_reporting() {
 
   // If no API key is set, break here and error out.
-  $api_key = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_api_key');
+  $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
   if (empty($api_key)) {
     // @FIXME
 // url() expects a route name or an external URI.
@@ -51,7 +51,7 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
   $output = '';
 
   // If no API key is set, break here and error out.
-  $api_key = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_api_key');
+  $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
   if (empty($api_key)) {
     // @FIXME
 // url() expects a route name or an external URI.

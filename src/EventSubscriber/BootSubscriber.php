@@ -19,9 +19,9 @@ class BootSubscriber implements EventSubscriberInterface {
 
   public function onEvent(\Symfony\Component\HttpKernel\Event\GetResponseEvent $event) {
 
-    $ignore_urls = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_ignore_urls');
-    $bg_urls = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_bg_urls');
-    $exclu_urls = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_exclusive_urls');
+    $ignore_urls = \Drupal::config('new_relic_rpm.settings')->get('ignore_urls');
+    $bg_urls = \Drupal::config('new_relic_rpm.settings')->get('bg_urls');
+    $exclu_urls = \Drupal::config('new_relic_rpm.settings')->get('exclusive_urls');
 
     // Handle cases where this getting called from command line and q isn't set.
     $path = isset($_GET['q']) ? $_GET['q'] : '';

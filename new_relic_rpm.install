@@ -31,8 +31,8 @@ function new_relic_rpm_requirements($phase) {
 // l() expects a Url object, created from a route name or external URI.
 // $requirements['newrelic_apikey'] = array(
 //       'title' => $t('New Relic API key'),
-//       'value' => (variable_get('new_relic_rpm_api_key', 0) == '' ? $t('Not set') : $t('Available')) . ' (' . l('Configure', 'admin/config/development/new-relic-rpm') . ')',
-//       'severity' => variable_get('new_relic_rpm_api_key', 0) == '' ? REQUIREMENT_INFO : REQUIREMENT_OK,
+//       'value' => (variable_get('api_key', 0) == '' ? $t('Not set') : $t('Available')) . ' (' . l('Configure', 'admin/config/development/new-relic-rpm') . ')',
+//       'severity' => variable_get('api_key', 0) == '' ? REQUIREMENT_INFO : REQUIREMENT_OK,
 //     );
 
   }
