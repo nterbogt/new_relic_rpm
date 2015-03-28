@@ -4,45 +4,6 @@
  * Drupal module implementing New Relic
  */
 
-/**
- * Implements hook_menu().
- */
-function new_relic_rpm_menu() {
-  $items['admin/content/new-relic-rpm'] = array(
-    'title' => 'New Relic RPM deployment',
-    'description' => "Create a new deployment for this site's App.",
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('new_relic_rpm_deploy'),
-    'access arguments' => array('create new relic rpm deployments'),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'new_relic_rpm.settings.inc',
-  );
-  $items['admin/config/development/new-relic-rpm'] = array(
-    'title' => 'New Relic RPM Settings',
-    'description' => 'Alter settings and mange your New Relic RPM Integration.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('new_relic_rpm_settings'),
-    'access arguments' => array('administer new relic rpm'),
-    'file' => 'new_relic_rpm.settings.inc',
-  );
-  $items['admin/reports/new-relic-rpm'] = array(
-    'title' => 'New Relic RPM reports',
-    'description' => 'View RPM reports and statistics.',
-    'page callback' => 'new_relic_rpm_reporting',
-    'access arguments' => array('view new relic rpm reports'),
-    'file' => 'new_relic_rpm.reports.inc',
-  );
-  $items['admin/reports/new-relic-rpm/details/%'] = array(
-    'title' => 'Application Details',
-    'description' => 'Get details for a specific application.',
-    'page callback' => 'new_relic_rpm_reporting_details',
-    'page arguments' => array(4, 5),
-    'access arguments' => array('view new relic rpm reports'),
-    'file' => 'new_relic_rpm.reports.inc',
-  );
-
-  return $items;
-}
 
 /**
  * Implements hook_cron().
@@ -52,17 +13,6 @@ function new_relic_rpm_menu() {
 function new_relic_rpm_cron() {
   $cron_tracking = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_track_cron');
   new_relic_rpm_set_job_state($cron_tracking);
-}
-
-/**
- * Implements hook_init().
- *
- * Sets New Relic error and exceptions handler.
- */
-function new_relic_rpm_init() {
-  if (\Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_override_exception_handler') && function_exists('newrelic_notice_error')) {
-    set_exception_handler('_new_relic_rpm_exception_handler');
-  }
 }
 
 /**

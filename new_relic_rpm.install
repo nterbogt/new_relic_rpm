@@ -9,14 +9,13 @@
  */
 function new_relic_rpm_requirements($phase) {
   $requirements = array();
-  $t = 't';
 
   if ($phase == 'install') {
     if (!extension_loaded('newrelic')) {
       $requirements['newrelic'] = array(
-        'title' => $t('none.'),
+        'title' => t('none.'),
         'value' => NULL,
-        'description' => $t('New Relic PHP Library missing. Check <a href="https://newrelic.com/docs/php/new-relic-for-php">Install New Relic for PHP</a> for more information.'),
+        'description' => t('New Relic PHP Library missing. Check <a href="https://newrelic.com/docs/php/new-relic-for-php">Install New Relic for PHP</a> for more information.'),
         'severity' => REQUIREMENT_ERROR,
       );
     }
@@ -24,8 +23,8 @@ function new_relic_rpm_requirements($phase) {
   if ($phase == 'runtime') {
     $new_relic_loaded = extension_loaded('newrelic');
     $requirements['newrelic'] = array(
-      'title' => $t('New Relic PHP Library'),
-      'value' =>  $new_relic_loaded ? $t('Exists') : $t('Not loaded'),
+      'title' => t('New Relic PHP Library'),
+      'value' =>  $new_relic_loaded ? t('Exists') : t('Not loaded'),
       'severity' => $new_relic_loaded ? REQUIREMENT_OK : REQUIREMENT_ERROR,
     );
     // @FIXME
