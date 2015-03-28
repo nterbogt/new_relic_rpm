@@ -152,7 +152,7 @@ function new_relic_rpm_render_health($app_health) {
     $table['rows'][] = $row;
   }
 
-  return _theme('table', $table);
+  return \Drupal::theme()->render('table', $table);
 }
 
 /**

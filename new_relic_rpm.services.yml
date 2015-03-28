@@ -1,17 +1,24 @@
 services:
-  init_subscriber:
+  new_relic_rpm.exception_subscriber:
     class: Drupal\new_relic_rpm\EventSubscriber\ExceptionSubscriber
+    arguments: ['@new_relic_rpm.adapter']
     tags:
       -
         name: event_subscriber
-  default_logger:
+  new_relic_rpm.logger:
     class: Drupal\new_relic_rpm\Logger\NewRelicLogger
-    arguments: ['@logger.log_message_parser']
+    arguments: ['@logger.log_message_parser', '@new_relic_rpm.adapter']
     tags:
       -
         name: logger
-  boot_subscriber:
-    class: Drupal\new_relic_rpm\EventSubscriber\BootSubscriber
+  new_relic_rpm.request_subscriber:
+    class: Drupal\new_relic_rpm\EventSubscriber\NewRelicRequestSubscriber
+    arguments: ['@new_relic_rpm.adapter', '@path.matcher', '@config.factory', '@path.current', '@current_route_match']
     tags:
       -
         name: event_subscriber
+
+  new_relic_rpm.adapter:
+    class: Drupal\new_relic_rpm\ExtensionAdapter\AdapterInterface
+    factory_class: Drupal\new_relic_rpm\ExtensionAdapter\AdapterFactory
+    factory_method: getAdapter

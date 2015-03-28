@@ -8,21 +8,16 @@
  * Implements hook_drush_init().
  */
 function new_relic_rpm_drush_init() {
-  if (\Drupal::hasService('module_handler') && \Drupal::moduleHandler()->moduleExists('new_relic_rpm')) {
-
-    // Make sure we have access to the needed functions.
-    require_once dirname(__FILE__) . '/new_relic_rpm.module';
-
-    if (!new_relic_rpm_extension_installed()) {
-      return;
-    }
+  if (\Drupal::hasService('new_relic_rpm.adapter')) {
+    /** @var \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter */
+    $adapter = \Drupal::service('new_relic_rpm.adapter');
 
     // Add custom paramter, telling the drush command executed.
     $command = drush_get_command();
     $drush_command = array_merge(array($command['command']), $command['arguments']);
-    newrelic_add_custom_parameter('Drush command', implode(' ', $drush_command));
+    $adapter->addCustomParameter('Drush command', implode(' ', $drush_command));
 
     // Set job state.
-    new_relic_rpm_set_job_state(\Drupal::config('new_relic_rpm.settings')->get('track_drush'));
+    $adapter->setTransactionState(\Drupal::config('new_relic_rpm.settings')->get('track_drush'));
   }
 }

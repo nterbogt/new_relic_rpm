@@ -8,8 +8,3 @@ new_relic_rpm.reporting:
   title: 'New Relic RPM reports'
   description: 'View RPM reports and statistics.'
   parent: system.admin_reports
-new_relic_rpm.reporting_details:
-  route_name: new_relic_rpm.reporting_details
-  title: 'Application Details'
-  description: 'Get details for a specific application.'
-  parent: new_relic_rpm.reporting

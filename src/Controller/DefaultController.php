@@ -1,4 +1,6 @@
-<?php /**
+<?php
+
+/**
  * @file
  * Contains \Drupal\new_relic_rpm\Controller\DefaultController.
  */

@@ -6,4 +6,4 @@ bg_urls: ''
 exclusive_urls: ''
 api_key: ''
 override_exception_handler: false
-watchdog_severities: []
+watchdog_severities: { }

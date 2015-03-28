@@ -4,7 +4,6 @@
  * Drupal module implementing New Relic
  */
 
-
 /**
  * Implements hook_cron().
  *
@@ -12,87 +11,7 @@
  */
 function new_relic_rpm_cron() {
   $cron_tracking = \Drupal::config('new_relic_rpm.settings')->get('track_cron');
-  new_relic_rpm_set_job_state($cron_tracking);
-}
-
-/**
- * Implements hook_boot().
- *
- * This is used to set various RPM settings by URL.
- */
-function new_relic_rpm_boot() {
-
-  $ignore_urls = \Drupal::config('new_relic_rpm.settings')->get('ignore_urls');
-  $bg_urls = \Drupal::config('new_relic_rpm.settings')->get('bg_urls');
-  $exclu_urls = \Drupal::config('new_relic_rpm.settings')->get('exclusive_urls');
-
-  // Handle cases where this getting called from command line and q isn't set.
-  $path = isset($_GET['q']) ? $_GET['q'] : '';
-
-  if (!empty($exclu_urls)) {
-    if (!new_relic_rpm_page_match($path, $exclu_urls)) {
-      return new_relic_rpm_set_job_state('ignore');
-    }
-  }
-
-  if (!empty($ignore_urls)) {
-    if (new_relic_rpm_page_match($path, $ignore_urls)) {
-      return new_relic_rpm_set_job_state('ignore');
-    }
-  }
-
-  if (!empty($bg_urls)) {
-    if (new_relic_rpm_page_match($path, $bg_urls)) {
-      return new_relic_rpm_set_job_state('bg');
-    }
-  }
-}
-
-/**
- * @todo Please document this function.
- * @see http://drupal.org/node/1354
- */
-function new_relic_rpm_set_job_state($setting) {
-  if (!new_relic_rpm_extension_installed()) {
-    return;
-  }
-
-  switch ($setting) {
-    case 'bg':
-      newrelic_background_job(TRUE);
-      break;
-
-    case 'ignore':
-      newrelic_ignore_transaction(TRUE);
-      break;
-
-  }
-}
-
-/**
- * Checks if the new_relic extension is installed.
- *
- * @return bool
- *   TRUE if the extension is installed, FALSE if not.
- */
-function new_relic_rpm_extension_installed() {
-  static $newrelic_module;
-
-  if (!isset($newrelic_module)) {
-    $newrelic_module = function_exists('newrelic_background_job');
-  }
-
-  // If newrelic module isn't loaded into php, error and return.
-  if (!$newrelic_module) {
-    // Only throw error if we've booted far enough to watchdog.
-    // i.e. drush updatedb
-    if (function_exists('module_implements')) {
-      \Drupal::logger('New Relic RPM')->error('New Relic RPM PHP module not enabled.', array());
-    }
-    return FALSE;
-  }
-
-  return TRUE;
+  \Drupal::service('new_relic_rpm.adapter')->setTransactionState($cron_tracking);
 }
 
 /**
@@ -191,29 +110,4 @@ function new_relic_rpm_curl($url, $post = array()) {
   }
 
   return $return_data;
-}
-
-/**
- * Check if a path matches any pattern in a set of patterns.
- *
- * This is a direct copy of drupal_match_path without the static cache since we
- * don't need it. This is needed because we need our hook_boot to be able to
- * operate before path.inc has been bootstrapped.
- *
- * @param $path
- *   The path to match.
- * @param $patterns
- *   String containing a set of patterns separated by \n, \r or \r\n.
- *
- * @return
- *   1 if there is a match, 0 if there is not a match.
- */
-function new_relic_rpm_page_match($path, $patterns) {
-  // @FIXME
-// // @FIXME
-// // This looks like another module's variable. You'll need to rewrite this call
-// // to ensure that it uses the correct configuration object.
-// $regexp = '/^(' . preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/', '/(^|\|)\\\\<front\\\\>($|\|)/'), array('|', '.*', '\1' . preg_quote(variable_get('site_frontpage', 'node'), '/') . '\2'), preg_quote($patterns, '/')) . ')$/';
-
-  return preg_match($regexp, $path);
 }

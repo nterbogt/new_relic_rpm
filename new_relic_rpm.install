@@ -10,16 +10,8 @@
 function new_relic_rpm_requirements($phase) {
   $requirements = array();
 
-  if ($phase == 'install') {
-    if (!extension_loaded('newrelic')) {
-      $requirements['newrelic'] = array(
-        'title' => t('none.'),
-        'value' => NULL,
-        'description' => t('New Relic PHP Library missing. Check <a href="https://newrelic.com/docs/php/new-relic-for-php">Install New Relic for PHP</a> for more information.'),
-        'severity' => REQUIREMENT_ERROR,
-      );
-    }
-  }
+  // We do not verify the extension at install time, to allow for testing when
+  // it is not present.
   if ($phase == 'runtime') {
     $new_relic_loaded = extension_loaded('newrelic');
     $requirements['newrelic'] = array(
@@ -27,13 +19,12 @@ function new_relic_rpm_requirements($phase) {
       'value' =>  $new_relic_loaded ? t('Exists') : t('Not loaded'),
       'severity' => $new_relic_loaded ? REQUIREMENT_OK : REQUIREMENT_ERROR,
     );
-    // @FIXME
-// l() expects a Url object, created from a route name or external URI.
-// $requirements['newrelic_apikey'] = array(
-//       'title' => $t('New Relic API key'),
-//       'value' => (variable_get('api_key', 0) == '' ? $t('Not set') : $t('Available')) . ' (' . l('Configure', 'admin/config/development/new-relic-rpm') . ')',
-//       'severity' => variable_get('api_key', 0) == '' ? REQUIREMENT_INFO : REQUIREMENT_OK,
-//     );
+    $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
+    $requirements['newrelic_apikey'] = array(
+       'title' => t('New Relic API key'),
+       'value' => ($api_key == '' ? t('Not set') : t('Available')) . ' (' . \Drupal::l(t('Configure'), 'new_relic_rpm.settings') . ')',
+       'severity' => $api_key == '' ? REQUIREMENT_INFO : REQUIREMENT_OK,
+     );
 
   }
 

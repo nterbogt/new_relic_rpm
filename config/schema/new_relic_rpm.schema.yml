@@ -18,3 +18,7 @@ new_relic_rpm.settings:
       type: string
     override_exception_handler:
       type: boolean
+    watchdog_severities:
+      type: sequence
+      sequence:
+        type: int

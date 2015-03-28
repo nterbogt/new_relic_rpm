@@ -20,7 +20,7 @@ class NewRelicRpmDeploy extends FormBase {
     return 'new_relic_rpm_deploy';
   }
 
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface &$form_state) {
+  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $form = [];
 
     $form['deploy_user'] = [
@@ -56,7 +56,7 @@ class NewRelicRpmDeploy extends FormBase {
     return $form;
   }
 
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface &$form_state) {
+  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
 
     $deployments = _new_relic_rpm_deploy($form_state->getValue(['deploy_user']), $form_state->getValue(['deploy_description']), $form_state->getValue(['deploy_changelog']), $form_state->getValue(['deploy_revision']));
 

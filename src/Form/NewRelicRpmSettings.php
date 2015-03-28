@@ -24,29 +24,11 @@ class NewRelicRpmSettings extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('new_relic_rpm.settings');
-
-    foreach (Element::children($form) as $variable) {
-      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
-    }
-    $config->save();
-
-    if (method_exists($this, '_submitForm')) {
-      $this->_submitForm($form, $form_state);
-    }
-
-    parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function getEditableConfigNames() {
     return ['new_relic_rpm.settings'];
   }
 
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface &$form_state) {
+  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $form = [];
 
     $form['track_drush'] = [
@@ -104,7 +86,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
       '#title' => t('Exclusive URLs'),
-      '#description' => t('Enter URLs you wish exclusively track. This is usefull for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
+      '#description' => t('Enter URLs you wish exclusively track. This is useful for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
       '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('exclusive_urls'),
     ];
 
@@ -115,10 +97,6 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('api_key'),
     ];
 
-    // @FIXME
-    // Could not extract the default value because it is either indeterminate, or
-    // not scalar. You'll need to provide a default value in
-    // config/install/new_relic_rpm.settings.yml and config/schema/new_relic_rpm.schema.yml.
     $form['watchdog_severities'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
@@ -136,6 +114,25 @@ class NewRelicRpmSettings extends ConfigFormBase {
     ];
 
     return parent::buildForm($form, $form_state);
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $config = $this->config('new_relic_rpm.settings');
+
+    foreach (Element::children($form) as $variable) {
+      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
+    }
+    $config->save();
+
+    if (method_exists($this, '_submitForm')) {
+      $this->_submitForm($form, $form_state);
+    }
+
+    parent::submitForm($form, $form_state);
   }
 
 }

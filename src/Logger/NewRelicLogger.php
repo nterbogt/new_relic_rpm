@@ -9,6 +9,7 @@ namespace Drupal\new_relic_rpm\Logger;
 
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
@@ -24,13 +25,21 @@ class NewRelicLogger implements LoggerInterface {
   protected $parser;
 
   /**
+   * @var \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface
+   */
+  protected $adapter;
+
+  /**
    * Constructs a DbLog object.
    *
    * @param \Drupal\Core\Logger\LogMessageParserInterface $parser
    *   The parser to use when extracting message variables.
+   * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
+   *   The new relic adapter.
    */
-  public function __construct(LogMessageParserInterface $parser) {
+  public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter) {
     $this->parser = $parser;
+    $this->adapter = $adapter;
   }
 
   /**
@@ -71,7 +80,7 @@ class NewRelicLogger implements LoggerInterface {
       '@message' => strip_tags(strtr($context['message'], $message_placeholders)),
     ));
 
-    newrelic_notice_error($message);
+    $this->adapter->logError($message);
   }
 
 }
