@@ -1,0 +1,16 @@
+services:
+  init_subscriber:
+    class: Drupal\new_relic_rpm\EventSubscriber\InitSubscriber
+    tags:
+      -
+        name: event_subscriber
+  default_logger:
+    class: Drupal\new_relic_rpm\Logger\DefaultLogger
+    tags:
+      -
+        name: logger
+  boot_subscriber:
+    class: Drupal\new_relic_rpm\EventSubscriber\BootSubscriber
+    tags:
+      -
+        name: event_subscriber

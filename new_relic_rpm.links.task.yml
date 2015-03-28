@@ -1,0 +1,3 @@
+new_relic_rpm.deploy:
+  route_name: new_relic_rpm.deploy
+  title: 'New Relic RPM deployment'

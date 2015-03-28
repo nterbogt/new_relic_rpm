@@ -1,0 +1,20 @@
+new_relic_rpm.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    new_relic_rpm_track_drush:
+      type: string
+    new_relic_rpm_track_cron:
+      type: string
+    new_relic_rpm_module_deployment:
+      type: boolean
+    new_relic_rpm_ignore_urls:
+      type: string
+    new_relic_rpm_bg_urls:
+      type: string
+    new_relic_rpm_exclusive_urls:
+      type: string
+    new_relic_rpm_api_key:
+      type: string
+    new_relic_rpm_override_exception_handler:
+      type: boolean

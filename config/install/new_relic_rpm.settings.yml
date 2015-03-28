@@ -1,0 +1,8 @@
+new_relic_rpm_track_drush: norm
+new_relic_rpm_track_cron: norm
+new_relic_rpm_module_deployment: false
+new_relic_rpm_ignore_urls: ''
+new_relic_rpm_bg_urls: ''
+new_relic_rpm_exclusive_urls: ''
+new_relic_rpm_api_key: ''
+new_relic_rpm_override_exception_handler: false

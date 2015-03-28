@@ -67,7 +67,7 @@ function new_relic_rpm_permission() {
  * This is used to set cron tasks to be not tracked by RPM if so desired.
  */
 function new_relic_rpm_cron() {
-  $cron_tracking = variable_get('new_relic_rpm_track_cron', 'norm');
+  $cron_tracking = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_track_cron');
   new_relic_rpm_set_job_state($cron_tracking);
 }
 
@@ -77,7 +77,7 @@ function new_relic_rpm_cron() {
  * Sets New Relic error and exceptions handler.
  */
 function new_relic_rpm_init() {
-  if (variable_get('new_relic_rpm_override_exception_handler', FALSE) && function_exists('newrelic_notice_error')) {
+  if (\Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_override_exception_handler') && function_exists('newrelic_notice_error')) {
     set_exception_handler('_new_relic_rpm_exception_handler');
   }
 }
@@ -91,7 +91,7 @@ function new_relic_rpm_init() {
  *   The exception object that was thrown.
  */
 function _new_relic_rpm_exception_handler($exception) {
-  require_once DRUPAL_ROOT . '/includes/errors.inc';
+  require_once \Drupal::root() . '/includes/errors.inc';
 
   try {
 
@@ -122,9 +122,9 @@ function _new_relic_rpm_exception_handler($exception) {
  */
 function new_relic_rpm_boot() {
 
-  $ignore_urls = variable_get('new_relic_rpm_ignore_urls', '');
-  $bg_urls = variable_get('new_relic_rpm_bg_urls', '');
-  $exclu_urls = variable_get('new_relic_rpm_exclusive_urls', '');
+  $ignore_urls = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_ignore_urls');
+  $bg_urls = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_bg_urls');
+  $exclu_urls = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_exclusive_urls');
 
   // Handle cases where this getting called from command line and q isn't set.
   $path = isset($_GET['q']) ? $_GET['q'] : '';
@@ -165,7 +165,11 @@ function new_relic_rpm_watchdog(array $log_entry) {
   }
 
   // Check if the severity is supposed to be logged.
-  if (!in_array($log_entry['severity'], variable_get('new_relic_rpm_watchdog_severities', array()))) {
+  // @FIXME
+// Could not extract the default value because it is either indeterminate, or
+// not scalar. You'll need to provide a default value in
+// config/install/new_relic_rpm.settings.yml and config/schema/new_relic_rpm.schema.yml.
+if (!in_array($log_entry['severity'], \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_watchdog_severities'))) {
     return;
   }
 
@@ -227,7 +231,7 @@ function new_relic_rpm_extension_installed() {
     // Only throw error if we've booted far enough to watchdog.
     // i.e. drush updatedb
     if (function_exists('module_implements')) {
-      watchdog('New Relic RPM', 'New Relic RPM PHP module not enabled.', array(), WATCHDOG_ERROR);
+      \Drupal::logger('New Relic RPM')->error('New Relic RPM PHP module not enabled.', array());
     }
     return FALSE;
   }
@@ -261,9 +265,9 @@ function new_relic_rpm_modules_disabled($modules) {
 function new_relic_rpm_module_deploy($new_modules, $disable_modules) {
   // If the API Key and/or App name is/are not set, there is no sense in
   // attempting to create deployments.
-  if (variable_get('new_relic_rpm_module_deployment', FALSE) &&
+  if (\Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_module_deployment') &&
       ini_get('newrelic.appname') &&
-      variable_get('new_relic_rpm_api_key', '')) {
+      \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_api_key')) {
     $modules_installed = !empty($new_modules);
     $modules_removed = !empty($disable_modules);
 
@@ -300,7 +304,7 @@ function _new_relic_rpm_deploy($user, $description, $changelog, $revision = NULL
   }
   $deployments = new_relic_rpm_curl('https://rpm.newrelic.com/deployments.xml', $post_vars);
 
-  watchdog('New Relic RPM', 'Module install/uninstall action logged as deployment. Log data: %details', array('%details' => $deployments));
+  \Drupal::logger('New Relic RPM')->notice('Module install/uninstall action logged as deployment. Log data: %details', array('%details' => $deployments));
 }
 
 /**
@@ -308,7 +312,7 @@ function _new_relic_rpm_deploy($user, $description, $changelog, $revision = NULL
  */
 function new_relic_rpm_curl($url, $post = array()) {
 
-  $api_key = variable_get('new_relic_rpm_api_key', '');
+  $api_key = \Drupal::config('new_relic_rpm.settings')->get('new_relic_rpm_api_key');
 
   // Set the header with the API key.
   $headers[] = "x-api-key: {$api_key}";
@@ -349,6 +353,11 @@ function new_relic_rpm_curl($url, $post = array()) {
  *   1 if there is a match, 0 if there is not a match.
  */
 function new_relic_rpm_page_match($path, $patterns) {
-  $regexp = '/^(' . preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/', '/(^|\|)\\\\<front\\\\>($|\|)/'), array('|', '.*', '\1' . preg_quote(variable_get('site_frontpage', 'node'), '/') . '\2'), preg_quote($patterns, '/')) . ')$/';
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $regexp = '/^(' . preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/', '/(^|\|)\\\\<front\\\\>($|\|)/'), array('|', '.*', '\1' . preg_quote(variable_get('site_frontpage', 'node'), '/') . '\2'), preg_quote($patterns, '/')) . ')$/';
+
   return preg_match($regexp, $path);
 }
