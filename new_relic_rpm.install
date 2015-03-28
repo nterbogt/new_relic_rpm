@@ -47,36 +47,5 @@ function new_relic_rpm_requirements($phase) {
 function new_relic_rpm_install() {
   // Set New Relic RPM module's weight to very low so we can trigger job state
   // changes early. This can be important in cases like hook_cron().
-  // TODO Please review the conversion of this statement to the D7 database API syntax.
-  /* db_query("UPDATE {system} SET weight = -20 WHERE name = 'new_relic_rpm'") */
-  // @FIXME
-// db_update('system')
-//   ->fields(array(
-//     'weight' => -20,
-//   ))
-//   ->condition('name', 'new_relic_rpm')
-//   ->execute();
-
-}
-
-/**
- * Implements hook_uninstall().
- */
-function new_relic_rpm_uninstall() {
-
-  // Remove variables.
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_track_cron')->save();
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_ignore_urls')->save();
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_bg_urls')->save();
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_exclusive_urls')->save();
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_api_key')->save();
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_module_deployment')->save();
-  \Drupal::config('new_relic_rpm.settings')->clear('new_relic_rpm_app_name')->save();
-}
-
-/**
- * Implements hook_update_last_removed().
- */
-function new_relic_rpm_update_last_removed() {
-  return 6002;
+  module_set_weight('new_relic_rpm', -20);
 }

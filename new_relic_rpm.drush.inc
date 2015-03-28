@@ -8,7 +8,7 @@
  * Implements hook_drush_init().
  */
 function new_relic_rpm_drush_init() {
-  if (function_exists('module_exists') && \Drupal::moduleHandler()->moduleExists('new_relic_rpm')) {
+  if (\Drupal::hasService('module_handler') && \Drupal::moduleHandler()->moduleExists('new_relic_rpm')) {
 
     // Make sure we have access to the needed functions.
     require_once dirname(__FILE__) . '/new_relic_rpm.module';

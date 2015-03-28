@@ -45,23 +45,6 @@ function new_relic_rpm_menu() {
 }
 
 /**
- * Implements hook_permission().
- */
-function new_relic_rpm_permission() {
-  return array(
-    'administer new relic rpm' => array(
-      'title' => t('Administer new relic rpm'),
-    ),
-    'view new relic rpm reports' => array(
-      'title' => t('View new relic rpm reports'),
-    ),
-    'create new relic rpm deployments' => array(
-      'title' => t('Create new relic rpm deployments'),
-    ),
-  );
-}
-
-/**
  * Implements hook_cron().
  *
  * This is used to set cron tasks to be not tracked by RPM if so desired.
