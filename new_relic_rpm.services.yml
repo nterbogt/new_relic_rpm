@@ -5,7 +5,8 @@ services:
       -
         name: event_subscriber
   default_logger:
-    class: Drupal\new_relic_rpm\Logger\DefaultLogger
+    class: Drupal\new_relic_rpm\Logger\NewRelicLogger
+    arguments: ['@logger.log_message_parser']
     tags:
       -
         name: logger

@@ -6,3 +6,4 @@ new_relic_rpm_bg_urls: ''
 new_relic_rpm_exclusive_urls: ''
 new_relic_rpm_api_key: ''
 new_relic_rpm_override_exception_handler: false
+new_relic_rpm_watchdog_severities: []
