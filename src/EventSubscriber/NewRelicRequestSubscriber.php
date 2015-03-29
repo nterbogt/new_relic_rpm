@@ -50,6 +50,13 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
   protected $routeMatch;
 
   /**
+   * A flag whether the master request was processed.
+   *
+   * @var bool
+   */
+  protected $processedMasterRequest = FALSE;
+
+  /**
    * Constructs a subscriber.
    *
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
@@ -75,7 +82,10 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
    */
   public function onRequest(GetResponseEvent $event) {
-    if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+    // If this is a sub request, only process it if there was no master
+    // request yet. In that case, it is probably a page not found or access
+    // denied page.
+    if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST && $this->processedMasterRequest) {
       return;
     }
 
@@ -106,6 +116,7 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
     // @todo: Make this configurable? New relic currently provides completely
     //   bogus transaction names, what it tries to do is the controller name.
     $this->adapter->setTransactionName($this->routeMatch->getRouteName());
+    $this->processedMasterRequest = TRUE;
   }
 
 }
