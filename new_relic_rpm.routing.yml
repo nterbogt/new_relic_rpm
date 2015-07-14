@@ -1,5 +1,5 @@
 new_relic_rpm.deploy:
-  path: /admin/content/new-relic-rpm
+  path: /admin/config/development/new-relic-rpm/deploy
   defaults:
     _title: 'New Relic RPM deployment'
     _form: \Drupal\new_relic_rpm\Form\NewRelicRpmDeploy
