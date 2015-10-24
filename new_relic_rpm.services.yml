@@ -19,6 +19,5 @@ services:
         name: event_subscriber
 
   new_relic_rpm.adapter:
-    class: Drupal\new_relic_rpm\ExtensionAdapter\AdapterInterface
-    factory_class: Drupal\new_relic_rpm\ExtensionAdapter\AdapterFactory
-    factory_method: getAdapter
+    class: Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface
+    factory: Drupal\new_relic_rpm\ExtensionAdapter\AdapterFactory::getAdapter
