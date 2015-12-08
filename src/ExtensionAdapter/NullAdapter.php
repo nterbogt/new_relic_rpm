@@ -37,4 +37,9 @@ class NullAdapter implements NewRelicAdapterInterface {
    */
   public function setTransactionName($name) { }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function recordCustomEvent($name, array $attributes) { }
+
 }

@@ -7,3 +7,5 @@ exclusive_urls: ''
 api_key: ''
 override_exception_handler: false
 watchdog_severities: { }
+views_log_slow: false
+views_log_threshold: 100

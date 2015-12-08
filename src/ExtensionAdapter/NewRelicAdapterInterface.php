@@ -59,4 +59,16 @@ interface NewRelicAdapterInterface {
    */
   public function setTransactionName($name);
 
+  /**
+   * Records a custom event for insights.
+   *
+   * @param string $name
+   *   Name of the event.
+   * @param array $attributes
+   *   List of attributees for the event. Only scalar types are allowed.
+   *
+   * @return mixed
+   */
+  public function recordCustomEvent($name, array $attributes);
+
 }

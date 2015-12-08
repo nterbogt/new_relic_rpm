@@ -22,3 +22,9 @@ new_relic_rpm.settings:
       type: sequence
       sequence:
         type: int
+    views_slow_log:
+      type: boolean
+      label: Log slow views
+    views_log_threshold:
+      type: int
+      label: Slow view threshold in ms

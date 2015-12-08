@@ -56,4 +56,13 @@ class ExtensionAdapter implements NewRelicAdapterInterface {
     newrelic_name_transaction($name);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function recordCustomEvent($name, array $attributes) {
+    if (function_exists('newrelic_record_custom_event')) {
+      newrelic_record_custom_event($name, $attributes);
+    }
+  }
+
 }
