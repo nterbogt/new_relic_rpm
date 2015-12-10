@@ -118,7 +118,7 @@ function new_relic_rpm_views_pre_build(ViewExecutable $view) {
 /**
  * Implements hook_views_post_render().
  */
-function new_relic_rpm_views_post_render(ViewExecutable $view, &$output, CachePluginBase $cache) {
+function new_relic_rpm_views_post_render(ViewExecutable $view) {
   if (\Drupal::config('new_relic_rpm.settings')->get('views_log_slow')) {
     $execution_time = Timer::stop('new_relic_rpm:' . $view->id() . ':' . $view->current_display);
     if ($execution_time > \Drupal::config('new_relic_rpm.settings')->get('views_log_threshold')) {
