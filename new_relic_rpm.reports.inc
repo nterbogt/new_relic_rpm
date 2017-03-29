@@ -47,7 +47,7 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
   // If no API key is set, break here and error out.
   $api_key = variable_get('new_relic_rpm_api_key', '');
   if (empty($api_key)) {
-    drupal_set_message(t('You need to enter your New Relic API key from your New Relic account settings page before you are able to view reports within Drupal. Visit the <a href="@settings">New Relic RPM Drupal admin page<a/> to enter your API key.', array('@settings' => url('admin/config/new-relic-rpm'))), 'error');
+    drupal_set_message(t('You need to enter your New Relic API key from your New Relic account settings page before you are able to view reports within Drupal. Visit the <a href="@settings">New Relic RPM Drupal admin page</a> to enter your API key.', array('@settings' => url('admin/config/new-relic-rpm'))), 'error');
     return '<h2>' . t('No API key found.') . '</h2>';
   }
 
