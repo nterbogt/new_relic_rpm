@@ -69,6 +69,13 @@ function new_relic_rpm_permission() {
 function new_relic_rpm_cron() {
   $cron_tracking = variable_get('new_relic_rpm_track_cron', 'norm');
   new_relic_rpm_set_job_state($cron_tracking);
+
+  // When using menu items as transaction names, we need to make sure that
+  // cron runs still show up as cron.php. Otherwise, the cron runs default to
+  // the menu item of the home page.
+  if (variable_get('new_relic_rpm_use_menu_item_as_transaction', FALSE)) {
+    newrelic_name_transaction('cron.php');
+  }
 }
 
 /**
