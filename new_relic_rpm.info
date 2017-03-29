@@ -1,3 +1,4 @@
 name = New Relic RPM
 description = Integration with the New Relic RPM reporting and optimization system.
 core = 7.x
+configure = admin/config/development/new-relic-rpm
