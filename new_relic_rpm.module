@@ -81,14 +81,33 @@ function new_relic_rpm_cron() {
 /**
  * Implements hook_init().
  *
- * Sets New Relic error and exceptions handler.
+ * Sets New Relic error and exceptions handler and handles transaction naming.
  */
 function new_relic_rpm_init() {
-  if (variable_get('new_relic_rpm_override_exception_handler', FALSE) && function_exists('newrelic_notice_error')) {
-    set_exception_handler('_new_relic_rpm_exception_handler');
-  }
-  if (variable_get('new_relic_rpm_use_menu_item_as_transaction', FALSE) && function_exists('newrelic_name_transaction') && ($menu_item = menu_get_item()) && !empty($menu_item['path'])) {
-    newrelic_name_transaction($menu_item['path']);
+  if (extension_loaded('newrelic')) {
+    if (variable_get('new_relic_rpm_override_exception_handler', FALSE)) {
+      set_exception_handler('_new_relic_rpm_exception_handler');
+    }
+
+    if (variable_get('new_relic_rpm_use_menu_item_as_transaction', FALSE)) {
+      $menu_item = menu_get_item();
+      if (!empty($menu_item['path'])) {
+        $name = $menu_item['path'];
+
+        if (variable_get('new_relic_rpm_add_node_type_to_node_page_paths', FALSE)) {
+          $parts = explode('/', $name);
+          if (isset($parts[0]) && $parts[0] === 'node' && isset($parts[1]) && $parts[1] === '%') {
+            $node = menu_get_object();
+            if (!empty($node->type)) {
+              $parts[1] .= $node->type;
+              $name = implode('/', $parts);
+            }
+          }
+        }
+
+        newrelic_name_transaction($name);
+      }
+    }
   }
 }
 
