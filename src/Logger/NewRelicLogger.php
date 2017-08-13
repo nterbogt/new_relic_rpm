@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\Logger\NewRelicLogger.
- */
-
 namespace Drupal\new_relic_rpm\Logger;
 
 use Drupal\Core\Logger\LogMessageParserInterface;
@@ -13,6 +8,9 @@ use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 
+/**
+ * A Logger that allows sending messages to the New Relic API.
+ */
 class NewRelicLogger implements LoggerInterface {
 
   use LoggerTrait;
@@ -25,6 +23,8 @@ class NewRelicLogger implements LoggerInterface {
   protected $parser;
 
   /**
+   * The Adapter for the New Relic extension.
+   *
    * @var \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface
    */
   protected $adapter;
@@ -45,7 +45,7 @@ class NewRelicLogger implements LoggerInterface {
   /**
    * {@inheritdoc}
    */
-  public function log($level, $message, array $context = array()) {
+  public function log($level, $message, array $context = []) {
     // Don't do anything if the new relic extension is not available.
     if (!function_exists('newrelic_notice_error')) {
       return;
@@ -68,7 +68,7 @@ class NewRelicLogger implements LoggerInterface {
 
     $message = "@message | Severity: (@severity) @severity_desc | Type: @type | Request URI:  @request_uri | Referrer URI: @referer_uri | User: (@uid) @name | IP Address: @ip";
 
-    $message = strtr($message, array(
+    $message = strtr($message, [
       '@severity' => $level,
       '@severity_desc' => $severity_list[$level],
       '@type' => $context['channel'],
@@ -78,7 +78,7 @@ class NewRelicLogger implements LoggerInterface {
       '@uid' => $context['uid'],
       '@name' => $context['user']->getUsername(),
       '@message' => strip_tags(strtr($context['message'], $message_placeholders)),
-    ));
+    ]);
 
     $this->adapter->logError($message);
   }

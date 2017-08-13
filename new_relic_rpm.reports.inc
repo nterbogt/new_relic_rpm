@@ -1,25 +1,34 @@
 <?php
+
 /**
  * @file
  * Reporting page callbacks.
+ *
+ * @todo Move this to Drupal\new_relic_rpm\Controller\DefaultController.
  */
+
+use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 /**
  * Main page for RPM reporting. List all the applications on this API Key.
+ *
+ * @todo Move this to Drupal\new_relic_rpm\Controller\DefaultController.
  */
 function new_relic_rpm_reporting() {
 
   // If no API key is set, break here and error out.
   $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
   if (empty($api_key)) {
-    // @FIXME
-// url() expects a route name or an external URI.
-// drupal_set_message(t('You need to enter your New Relic API key from your New Relic account settings page before you are able to view reports within Drupal. Visit the <a href="@settings">New Relic RPM Drupal admin page</a> to enter your API key.', array('@settings' => url('admin/config/new-relic-rpm'))), 'error');
-
+    drupal_set_message(t(
+      'You need to enter your New Relic API key from your New Relic account settings page before you are able to view reports within Drupal. Visit the <a href="@settings">New Relic RPM Drupal admin page</a> to enter your API key.',
+      ['@settings' => Url::fromRoute('new_relic_rpm.settings')]
+    ), 'error');
     return '<h2>' . t('No API key found.') . '</h2>';
   }
 
-  // Get basic app health. This is also our first check for a bad key/access denied.
+  // Get basic app health.
+  // This is also our first check for a bad key/access denied.
   // Only hit the REST API every 60 seconds.
   if ($_SESSION['new_relic_rpm_health_time'] < $_SERVER['REQUEST_TIME'] - 60 || !$_SESSION['new_relic_rpm_health_xml']) {
     $app_health = new_relic_rpm_curl('https://rpm.newrelic.com/accounts.xml?include=application_health');
@@ -29,10 +38,10 @@ function new_relic_rpm_reporting() {
   }
   // Error out of the return is False, store data if it is good.
   if (!$app_health) {
-    // @FIXME
-// url() expects a route name or an external URI.
-// drupal_set_message(t('The New Relic REST API has denied your key. Either the key you entered on the <a href="@settings">New Relic RPM Drupal admin page</a> is incorrect, or you have not enabled API access for this application within the New Relic RPM webiste.', array('@settings' => url('admin/config/new-relic-rpm'))), 'error');
-
+    drupal_set_message($this->t(
+      'The New Relic REST API has denied your key. Either the key you entered on the <a href="@settings">New Relic RPM Drupal admin page</a> is incorrect, or you have not enabled API access for this application within the New Relic RPM webiste.',
+      ['@settings' => Url::fromRoute('new_relic_rpm.settings')]
+    ), 'error');
     return '<h2>' . t('API access denied.') . '</h2>';
   }
   else {
@@ -45,6 +54,9 @@ function new_relic_rpm_reporting() {
 
 /**
  * Load the details for a specfic application.
+ *
+ * @todo Move this to Drupal\new_relic_rpm\Controller\DefaultController.
+ * @todo Add deployment information to the page.
  */
 function new_relic_rpm_reporting_details($cust_id, $app_id) {
 
@@ -53,10 +65,10 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
   // If no API key is set, break here and error out.
   $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
   if (empty($api_key)) {
-    // @FIXME
-// url() expects a route name or an external URI.
-// drupal_set_message(t('You need to enter your New Relic API key from your New Relic account settings page before you are able to view reports within Drupal. Visit the <a href="@settings">New Relic RPM Drupal admin page<a/> to enter your API key.', array('@settings' => url('admin/config/new-relic-rpm'))), 'error');
-
+    drupal_set_message(t(
+      'You need to enter your New Relic API key from your New Relic account settings page before you are able to view reports within Drupal. Visit the <a href="@settings">New Relic RPM Drupal admin page</a> to enter your API key.',
+      ['@settings' => Url::fromRoute('new_relic_rpm.settings')]
+    ), 'error');
     return '<h2>' . t('No API key found.') . '</h2>';
   }
 
@@ -70,10 +82,10 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
 
   // Error out if value is false, save cached copy of XML if it is good.
   if (!$app_dashboard) {
-    // @FIXME
-// url() expects a route name or an external URI.
-// drupal_set_message(t('The New Relic REST API has denied your key. Either the key you entered on the <a href="@settings">New Relic RPM Drupal admin page</a> is incorrect, or you have not enabled API access for this application within the New Relic RPM webiste.', array('@settings' => url('admin/config/new-relic-rpm'))), 'error');
-
+    drupal_set_message($this->t(
+      'The New Relic REST API has denied your key. Either the key you entered on the <a href="@settings">New Relic RPM Drupal admin page</a> is incorrect, or you have not enabled API access for this application within the New Relic RPM webiste.',
+      ['@settings' => Url::fromRoute('new_relic_rpm.settings')]
+    ), 'error');
     return '<h2>' . t('API access denied.') . '</h2>';
   }
   else {
@@ -83,9 +95,6 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
 
   $output .= $app_dashboard;
 
-  //$post_vars['deployment[application_id]'] = check_plain($_GET['app_name']);
-  //$deployments = new_relic_rpm_curl('https://rpm.newrelic.com/deployments.xml', $post_vars);
-  //$output .= '<pre>'.htmlentities(print_r($deployments, TRUE)).'</pre>';
   $output .= new_relic_rpm_render_actions($cust_id, $app_id);
 
   return $output;
@@ -93,7 +102,9 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
 
 /**
  * Render the application health display.
- * TODO -- Figure out the threshold information
+ *
+ * @todo Move this to Drupal\new_relic_rpm\Controller\DefaultController.
+ * @todo Figure out the threshold information.
  */
 function new_relic_rpm_render_health($app_health) {
 
@@ -120,7 +131,7 @@ function new_relic_rpm_render_health($app_health) {
     }
   }
 
-  $table['header'] = array(
+  $table['header'] = [
     'App Name',
     'App ID',
     'ApDex',
@@ -133,22 +144,34 @@ function new_relic_rpm_render_health($app_health) {
     'CPU',
     'Memory',
     'Details',
-  );
+  ];
 
-  $metrics = array('Apdex', 'Response Time', 'Errors', 'Error Rate', 'Throughput', 'Application Busy', 'DB', 'CPU', 'Memory');
+  $metrics = [
+    'Apdex',
+    'Response Time',
+    'Errors',
+    'Error Rate',
+    'Throughput',
+    'Application Busy',
+    'DB',
+    'CPU',
+    'Memory',
+  ];
   foreach ($app_data as $k => $v) {
-    $row = array($k, $v['AppID']);
+    $row = [$k, $v['AppID']];
     foreach ($metrics as $metric) {
-      $cell = array('data' => $v[$metric]['val']);
+      $cell = ['data' => $v[$metric]['val']];
       if ($v[$metric]['mval'] > $v[$metric]['thresh']) {
         $cell['class'] = 'error';
       }
       $row[] = $cell;
     }
-    // @FIXME
-// l() expects a Url object, created from a route name or external URI.
-// $row[] = l('Details', 'admin/reports/new-relic-rpm/details/' . $cust_id . '/' . $v['AppID'], array('query' => array('app_name' => $k)));
-
+    $link = new Link(t('Details'), Url::fromRoute('new_relic_rpm.reporting_details', [
+      'cust_id' => $cust_id,
+      'app_id' => $v['AppID'],
+      'app_name' => $k,
+    ]));
+    $row[] = $link->toString();
     $table['rows'][] = $row;
   }
 
@@ -157,11 +180,13 @@ function new_relic_rpm_render_health($app_health) {
 
 /**
  * Render the quick actions menu.
+ *
+ * @todo Move this to Drupal\new_relic_rpm\Controller\DefaultController.
  */
 function new_relic_rpm_render_actions($cust_id, $app_id) {
 
   $rpm_url = "https://rpm.newrelic.com/accounts/{$cust_id}/applications/{$app_id}";
-  $actions = array(
+  $actions = [
     'transactions' => t('Web Transactions'),
     'databases' => t('Database Activity'),
     'background_tasks' => t('Background Tasks'),
@@ -169,26 +194,26 @@ function new_relic_rpm_render_actions($cust_id, $app_id) {
     'edit' => t('App Settings'),
     'edit_alerts' => t('App Alerts & Thresholds'),
     'deployments' => t('Deployments'),
-  );
-  $links = array(
-    'overview' => array(
+  ];
+  $links = [
+    'overview' => [
       'title' => t("Overview"),
       'href' => $rpm_url,
-      'attributes' => array('class' => '_blank'),
-    )
-  );
+      'attributes' => ['class' => '_blank'],
+    ],
+  ];
   foreach ($actions as $action => $title) {
-    $links[$action] = array(
+    $links[$action] = [
       'title' => $title,
       'href' => "{$rpm_url}/{$action}",
-      'attributes' => array('target' => '_blank'),
-    );
+      'attributes' => ['target' => '_blank'],
+    ];
   }
 
-  $list = array(
-    'heading' => t('Links to New Relic\'s website for this Application'),
+  $list = [
+    'heading' => t("Links to New Relic's website for this Application"),
     'links' => $links,
-  );
+  ];
 
   return _theme('links', $list);
 }

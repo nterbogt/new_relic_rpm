@@ -1,12 +1,11 @@
 <?php
+
 /**
  * @file
- * Drupal module implementing New Relic
+ * Drupal module implementing New Relic.
  */
 
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\new_relic_rpm\Timer;
-use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -52,7 +51,7 @@ function new_relic_rpm_module_deploy($new_modules, $disable_modules) {
     $modules_removed = !empty($disable_modules);
 
     if ($modules_installed) {
-      $m_inst = 'Modules Installed: ' . implode(', ', $new_modules ) . "\n";
+      $m_inst = 'Modules Installed: ' . implode(', ', $new_modules) . "\n";
     }
     else {
       $m_inst = '';
@@ -82,9 +81,6 @@ function new_relic_rpm_module_deploy($new_modules, $disable_modules) {
  *   (optional) A list of changes for this deployment.
  * @param string $revision
  *   (optional) Revision id of the deployment.
- *
- * @return NULL
- *   No return. Deployment is noted in watchdog and in New Relic.
  */
 function _new_relic_rpm_deploy($user = NULL, $description = NULL, $changelog = NULL, $revision = NULL) {
 
@@ -92,7 +88,7 @@ function _new_relic_rpm_deploy($user = NULL, $description = NULL, $changelog = N
   if (isset($user)) {
     $post_vars['deployment[user]'] = $user;
   }
-  if (isset ($description)) {
+  if (isset($description)) {
     $post_vars['deployment[description]'] = $description;
   }
   if (isset($changelog)) {
@@ -103,7 +99,7 @@ function _new_relic_rpm_deploy($user = NULL, $description = NULL, $changelog = N
   }
   $deployments = new_relic_rpm_curl('https://rpm.newrelic.com/deployments.xml', $post_vars);
 
-  \Drupal::logger('New Relic RPM')->notice('Module install/uninstall action logged as deployment. Log data: %details', array('%details' => $deployments));
+  \Drupal::logger('New Relic RPM')->notice('Module install/uninstall action logged as deployment. Log data: %details', ['%details' => $deployments]);
 }
 
 /**
@@ -134,7 +130,7 @@ function new_relic_rpm_views_post_render(ViewExecutable $view) {
 /**
  * This is the generic cURL function all New Relic Web API calls go through.
  */
-function new_relic_rpm_curl($url, $post = array()) {
+function new_relic_rpm_curl($url, $post = []) {
 
   $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
 

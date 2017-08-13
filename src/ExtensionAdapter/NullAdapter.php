@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\ExtensionAdapter\NullNewRelicAdapter.
- */
-
 namespace Drupal\new_relic_rpm\ExtensionAdapter;
 
 /**
@@ -15,31 +10,31 @@ class NullAdapter implements NewRelicAdapterInterface {
   /**
    * {@inheritdoc}
    */
-  public function setTransactionState($state) { }
+  public function setTransactionState($state) {}
 
   /**
    * {@inheritdoc}
    */
-  public function logException(\Exception $e) { }
+  public function logException(\Exception $e) {}
 
   /**
    * {@inheritdoc}
    */
-  public function logError($message) { }
+  public function logError($message) {}
 
   /**
    * {@inheritdoc}
    */
-  public function addCustomParameter($key, $value) { }
+  public function addCustomParameter($key, $value) {}
 
   /**
    * {@inheritdoc}
    */
-  public function setTransactionName($name) { }
+  public function setTransactionName($name) {}
 
   /**
    * {@inheritdoc}
    */
-  public function recordCustomEvent($name, array $attributes) { }
+  public function recordCustomEvent($name, array $attributes) {}
 
 }

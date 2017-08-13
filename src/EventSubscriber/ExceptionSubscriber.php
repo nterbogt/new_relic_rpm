@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\EventSubscriber\ExceptionSubscriber.
- */
-
 namespace Drupal\new_relic_rpm\EventSubscriber;
 
 use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
@@ -13,6 +8,9 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Provides a way to send Exceptions to the New Relic API.
+ */
 class ExceptionSubscriber implements EventSubscriberInterface {
 
   /**
@@ -26,6 +24,7 @@ class ExceptionSubscriber implements EventSubscriberInterface {
    * Constructs a subscriber.
    *
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
+   *   The Adapter to use when talking to the New Relic extension.
    */
   public function __construct(NewRelicAdapterInterface $adapter) {
     $this->adapter = $adapter;

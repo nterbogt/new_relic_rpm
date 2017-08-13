@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * New Relic RPM Drush integration.
@@ -14,7 +15,7 @@ function new_relic_rpm_drush_init() {
 
     // Add custom paramter, telling the drush command executed.
     $command = drush_get_command();
-    $drush_command = array_merge(array($command['command']), $command['arguments']);
+    $drush_command = array_merge([$command['command']], $command['arguments']);
     $adapter->addCustomParameter('Drush command', implode(' ', $drush_command));
 
     // Set job state.
@@ -26,19 +27,19 @@ function new_relic_rpm_drush_init() {
  * Implements hook_drush_command().
  */
 function new_relic_rpm_drush_command() {
-  $items = array();
+  $items = [];
 
-  $items['newrelic-deploy'] = array(
+  $items['newrelic-deploy'] = [
     'callback' => '_new_relic_rpm_deploy',
     'description' => dt('Notify New Relic of a deployment.'),
-    'arguments' => array(
+    'arguments' => [
       'user' => dt('Optional. User doing the deploy.'),
       'description' => dt('Optional. A brief describing of the deployment.'),
       'changelog' => dt('Optional. A list of changes for this deployment.'),
       'revision' => dt('Optional. Revision id of the deployment.'),
-    ),
-    'aliases' => array('nrd'),
-  );
+    ],
+    'aliases' => ['nrd'],
+  ];
 
   return $items;
 }

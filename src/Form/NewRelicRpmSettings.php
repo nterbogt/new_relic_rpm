@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\Form\NewRelicRpmSettings.
- */
-
 namespace Drupal\new_relic_rpm\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
@@ -12,6 +7,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\Render\Element;
 
+/**
+ * Provides a settings form to configure the New Relic RPM module.
+ */
 class NewRelicRpmSettings extends ConfigFormBase {
 
   /**
@@ -28,7 +26,10 @@ class NewRelicRpmSettings extends ConfigFormBase {
     return ['new_relic_rpm.settings'];
   }
 
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
 
     $form['track_drush'] = [
@@ -115,7 +116,6 @@ class NewRelicRpmSettings extends ConfigFormBase {
 
     return parent::buildForm($form, $form_state);
   }
-
 
   /**
    * {@inheritdoc}

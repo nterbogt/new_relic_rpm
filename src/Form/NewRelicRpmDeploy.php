@@ -1,16 +1,14 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\Form\NewRelicRpmDeploy.
- */
-
 namespace Drupal\new_relic_rpm\Form;
 
-use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Url;
 
+/**
+ * Provides a form to allow marking deployments on the New Relic interface.
+ */
 class NewRelicRpmDeploy extends FormBase {
 
   /**
@@ -20,7 +18,10 @@ class NewRelicRpmDeploy extends FormBase {
     return 'new_relic_rpm_deploy';
   }
 
-  public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
 
     $form['deploy_user'] = [
@@ -56,7 +57,10 @@ class NewRelicRpmDeploy extends FormBase {
     return $form;
   }
 
-  public function submitForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $deployments = _new_relic_rpm_deploy($form_state->getValue(['deploy_user']), $form_state->getValue(['deploy_description']), $form_state->getValue(['deploy_changelog']), $form_state->getValue(['deploy_revision']));
 
@@ -64,10 +68,10 @@ class NewRelicRpmDeploy extends FormBase {
       drupal_set_message(t('New Relic RPM deployment created successfully'), 'status');
     }
     else {
-      // @FIXME
-// url() expects a route name or an external URI.
-// drupal_set_message(t('New Relic RPM deployment failed to be created. Please ensure you have your account configured on the <a href="@settings">New Relic RPM Drupal admin page</a>.', array('@settings' => url('admin/config/development/new-relic-rpm'))), 'error');
-
+      drupal_set_message($this->t(
+        'New Relic RPM deployment failed to be created. Please ensure you have your account configured on the <a href="@settings">New Relic RPM Drupal admin page</a>.',
+        ['@settings' => Url::fromRoute('new_relic_rpm.settings')]
+      ), 'error');
     }
   }
 

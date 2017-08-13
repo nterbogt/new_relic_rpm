@@ -16,13 +16,13 @@ new_relic_rpm.reporting:
   path: /admin/reports/new-relic-rpm
   defaults:
     _title: 'New Relic RPM reports'
-    _content: '\Drupal\new_relic_rpm\Controller\DefaultController::new_relic_rpm_reporting'
+    _content: '\Drupal\new_relic_rpm\Controller\DefaultController::newRelicRpmReporting'
   requirements:
     _permission: 'view new relic rpm reports'
 new_relic_rpm.reporting_details:
   path: '/admin/reports/new-relic-rpm/details/{cust_id}/{app_id}'
   defaults:
     _title: 'Application Details'
-    _content: '\Drupal\new_relic_rpm\Controller\DefaultController::new_relic_rpm_reporting_details'
+    _content: '\Drupal\new_relic_rpm\Controller\DefaultController::newRelicRpmReportingDetails'
   requirements:
     _permission: 'view new relic rpm reports'

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\EventSubscriber\NewRelicRequestSubscriber.
- */
-
 namespace Drupal\new_relic_rpm\EventSubscriber;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -30,21 +25,29 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
   protected $adapter;
 
   /**
+   * The object we use for matching paths.
+   *
    * @var \Drupal\Core\Path\PathMatcherInterface
    */
   protected $pathMatcher;
 
   /**
+   * The configuration for the New Relic RPM module.
+   *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   protected $config;
 
   /**
+   * An object representing the current URL path of the request.
+   *
    * @var \Drupal\Core\Path\CurrentPathStack
    */
   protected $currentPathStack;
 
   /**
+   * An object providing information about the current route.
+   *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
   protected $routeMatch;
@@ -60,6 +63,15 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    * Constructs a subscriber.
    *
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
+   *   The Adapter that we use to talk to the New Relic extension.
+   * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
+   *   The object we use for matching paths.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The object we use to get our settings.
+   * @param \Drupal\Core\Path\CurrentPathStack $current_path_stack
+   *   An object representing the current URL path of the request.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   An object providing information about the current route.
    */
   public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack, RouteMatchInterface $route_match) {
     $this->adapter = $adapter;
@@ -78,8 +90,12 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Set the desired transaction state and name, based on the current path and matched route.
+   * Set the desired transaction state and name.
+   *
+   * Naming is based on the current path and route.
+   *
    * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+   *   The current response event for the page.
    */
   public function onRequest(GetResponseEvent $event) {
     // If this is a sub request, only process it if there was no master
@@ -114,7 +130,7 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
 
     // If the path was not ignored, set the transaction mame.
     // @todo: Make this configurable? New relic currently provides completely
-    //   bogus transaction names, what it tries to do is the controller name.
+    // bogus transaction names, what it tries to do is the controller name.
     $this->adapter->setTransactionName($this->routeMatch->getRouteName());
     $this->processedMasterRequest = TRUE;
   }

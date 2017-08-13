@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface.
- */
-
 namespace Drupal\new_relic_rpm\ExtensionAdapter;
 
 /**
@@ -46,7 +41,7 @@ interface NewRelicAdapterInterface {
    * @param string $key
    *   Key that identifies the parameter.
    * @param string $value
-   *   Value for the parameter
+   *   Value for the parameter.
    */
   public function addCustomParameter($key, $value);
 
@@ -55,7 +50,6 @@ interface NewRelicAdapterInterface {
    *
    * @param string $name
    *   Name for this transaction.
-   *
    */
   public function setTransactionName($name);
 
@@ -66,8 +60,6 @@ interface NewRelicAdapterInterface {
    *   Name of the event.
    * @param array $attributes
    *   List of attributees for the event. Only scalar types are allowed.
-   *
-   * @return mixed
    */
   public function recordCustomEvent($name, array $attributes);
 

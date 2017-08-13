@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\new_relic_rpm\ExtensionAdapter\ExtensionNewRelicAdapter.
- */
-
 namespace Drupal\new_relic_rpm\ExtensionAdapter;
 
 /**
