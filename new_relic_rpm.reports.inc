@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Reporting page callbacks.
@@ -16,7 +17,8 @@ function new_relic_rpm_reporting() {
     return '<h2>' . t('No API key found.') . '</h2>';
   }
 
-  // Get basic app health. This is also our first check for a bad key/access denied.
+  // Get basic app health.
+  // This is also our first check for a bad key/access denied.
   // Only hit the REST API every 60 seconds.
   if ($_SESSION['new_relic_rpm_health_time'] < $_SERVER['REQUEST_TIME'] - 60 || !$_SESSION['new_relic_rpm_health_xml']) {
     $app_health = new_relic_rpm_curl('https://rpm.newrelic.com/accounts.xml?include=application_health');
@@ -71,9 +73,6 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
 
   $output .= $app_dashboard;
 
-  //$post_vars['deployment[application_id]'] = check_plain($_GET['app_name']);
-  //$deployments = new_relic_rpm_curl('https://rpm.newrelic.com/deployments.xml', $post_vars);
-  //$output .= '<pre>'.htmlentities(print_r($deployments, TRUE)).'</pre>';
   $output .= new_relic_rpm_render_actions($cust_id, $app_id);
 
   return $output;
@@ -81,7 +80,8 @@ function new_relic_rpm_reporting_details($cust_id, $app_id) {
 
 /**
  * Render the application health display.
- * TODO -- Figure out the threshold information
+ *
+ * @todo Figure out the threshold information
  */
 function new_relic_rpm_render_health($app_health) {
 
@@ -123,7 +123,17 @@ function new_relic_rpm_render_health($app_health) {
     'Details',
   );
 
-  $metrics = array('Apdex', 'Response Time', 'Errors', 'Error Rate', 'Throughput', 'Application Busy', 'DB', 'CPU', 'Memory');
+  $metrics = array(
+    'Apdex',
+    'Response Time',
+    'Errors',
+    'Error Rate',
+    'Throughput',
+    'Application Busy',
+    'DB',
+    'CPU',
+    'Memory',
+  );
   foreach ($app_data as $k => $v) {
     $row = array($k, $v['AppID']);
     foreach ($metrics as $metric) {
@@ -133,7 +143,7 @@ function new_relic_rpm_render_health($app_health) {
       }
       $row[] = $cell;
     }
-    $row[] = l('Details', 'admin/reports/new-relic-rpm/details/' . $cust_id . '/' . $v['AppID'], array('query' => array('app_name' => $k)));
+    $row[] = l(t('Details'), 'admin/reports/new-relic-rpm/details/' . $cust_id . '/' . $v['AppID'], array('query' => array('app_name' => $k)));
     $table['rows'][] = $row;
   }
 
@@ -160,7 +170,7 @@ function new_relic_rpm_render_actions($cust_id, $app_id) {
       'title' => t("Overview"),
       'href' => $rpm_url,
       'attributes' => array('class' => '_blank'),
-    )
+    ),
   );
   foreach ($actions as $action => $title) {
     $links[$action] = array(
@@ -171,7 +181,7 @@ function new_relic_rpm_render_actions($cust_id, $app_id) {
   }
 
   $list = array(
-    'heading' => t('Links to New Relic\'s website for this Application'),
+    'heading' => t("Links to New Relic's website for this Application"),
     'links' => $links,
   );
 

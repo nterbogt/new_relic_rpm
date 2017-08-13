@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * New Relic RPM Drush integration.
@@ -28,7 +29,7 @@ function new_relic_rpm_drush_init() {
 }
 
 /**
- * Implementation of hook_drush_command().
+ * Implements hook_drush_command().
  */
 function new_relic_rpm_drush_command() {
   $items = array();

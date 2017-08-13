@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @file
- * Install and uninstall functions as well as schema definition for the Mollom module.
+ * Install and uninstall functions for the new_relic_rpm module.
  */
 
 /**
@@ -25,12 +26,12 @@ function new_relic_rpm_requirements($phase) {
     $new_relic_loaded = extension_loaded('newrelic');
     $requirements['newrelic'] = array(
       'title' => $t('New Relic PHP Library'),
-      'value' =>  $new_relic_loaded ? $t('Exists') : $t('Not loaded'),
+      'value' => $new_relic_loaded ? $t('Exists') : $t('Not loaded'),
       'severity' => $new_relic_loaded ? REQUIREMENT_OK : REQUIREMENT_ERROR,
     );
     $requirements['newrelic_apikey'] = array(
       'title' => $t('New Relic API key'),
-      'value' => (variable_get('new_relic_rpm_api_key', 0) == '' ? $t('Not set') : $t('Available')) . ' (' . l('Configure', 'admin/config/development/new-relic-rpm') . ')',
+      'value' => (variable_get('new_relic_rpm_api_key', 0) == '' ? $t('Not set') : $t('Available')) . ' (' . l(t('Configure'), 'admin/config/development/new-relic-rpm') . ')',
       'severity' => variable_get('new_relic_rpm_api_key', 0) == '' ? REQUIREMENT_INFO : REQUIREMENT_OK,
     );
   }
@@ -44,14 +45,12 @@ function new_relic_rpm_requirements($phase) {
 function new_relic_rpm_install() {
   // Set New Relic RPM module's weight to very low so we can trigger job state
   // changes early. This can be important in cases like hook_cron().
-  // TODO Please review the conversion of this statement to the D7 database API syntax.
-  /* db_query("UPDATE {system} SET weight = -20 WHERE name = 'new_relic_rpm'") */
   db_update('system')
-  ->fields(array(
-    'weight' => -20,
-  ))
-  ->condition('name', 'new_relic_rpm')
-  ->execute();
+    ->fields(array(
+      'weight' => -20,
+    ))
+    ->condition('name', 'new_relic_rpm')
+    ->execute();
 }
 
 /**

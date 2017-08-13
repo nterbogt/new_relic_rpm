@@ -1,7 +1,8 @@
 <?php
+
 /**
  * @file
- * Drupal module implementing New Relic
+ * Drupal module implementing New Relic.
  */
 
 /**
@@ -116,7 +117,7 @@ function new_relic_rpm_init() {
  *
  * Will invoke newrelic_notice_error() to forward the exception to New Relic.
  *
- * @param $exception
+ * @param object $exception
  *   The exception object that was thrown.
  */
 function _new_relic_rpm_exception_handler($exception) {
@@ -135,7 +136,8 @@ function _new_relic_rpm_exception_handler($exception) {
   }
   catch (Exception $exception2) {
     // Another uncaught exception was thrown while handling the first one.
-    // If we are displaying errors, then do so with no possibility of a further uncaught exception being thrown.
+    // If we are displaying errors, then do so with no possibility of a further
+    // uncaught exception being thrown.
     if (error_displayable()) {
       print '<h1>Additional uncaught exception thrown while handling exception.</h1>';
       print '<h2>Original</h2><p>' . _drupal_render_exception_safe($exception) . '</p>';
@@ -218,8 +220,7 @@ function new_relic_rpm_watchdog(array $log_entry) {
 }
 
 /**
- * @todo Please document this function.
- * @see http://drupal.org/node/1354
+ * Tells New Relic if a job should be ignored or counted as a background job.
  */
 function new_relic_rpm_set_job_state($setting) {
   if (!new_relic_rpm_extension_installed()) {
@@ -254,7 +255,7 @@ function new_relic_rpm_extension_installed() {
   // If newrelic module isn't loaded into php, error and return.
   if (!$newrelic_module) {
     // Only throw error if we've booted far enough to watchdog.
-    // i.e. drush updatedb
+    // i.e. drush updatedb.
     if (function_exists('module_implements')) {
       watchdog('New Relic RPM', 'New Relic RPM PHP module not enabled.', array(), WATCHDOG_ERROR);
     }
@@ -297,7 +298,7 @@ function new_relic_rpm_module_deploy($new_modules, $disable_modules) {
     $modules_removed = !empty($disable_modules);
 
     if ($modules_installed) {
-      $m_inst = 'Modules Installed: ' . implode(', ', $new_modules ) . "\n";
+      $m_inst = 'Modules Installed: ' . implode(', ', $new_modules) . "\n";
     }
     else {
       $m_inst = '';
@@ -318,6 +319,7 @@ function new_relic_rpm_module_deploy($new_modules, $disable_modules) {
 
 /**
  * Send deployments to New Relic's web API.
+ *
  * @param string $user
  *   (optional) User deploying changes.
  * @param string $description
@@ -326,9 +328,6 @@ function new_relic_rpm_module_deploy($new_modules, $disable_modules) {
  *   (optional) A list of changes for this deployment.
  * @param string $revision
  *   (optional) Revision id of the deployment.
- *
- * @return NULL
- *   No return. Deployment is noted in watchdog and in New Relic.
  */
 function _new_relic_rpm_deploy($user = NULL, $description = NULL, $changelog = NULL, $revision = NULL) {
 
@@ -336,7 +335,7 @@ function _new_relic_rpm_deploy($user = NULL, $description = NULL, $changelog = N
   if (isset($user)) {
     $post_vars['deployment[user]'] = $user;
   }
-  if (isset($description)){
+  if (isset($description)) {
     $post_vars['deployment[description]'] = $description;
   }
   if (isset($changelog)) {
@@ -387,15 +386,24 @@ function new_relic_rpm_curl($url, $post = array()) {
  * don't need it. This is needed because we need our hook_boot to be able to
  * operate before path.inc has been bootstrapped.
  *
- * @param $path
+ * @param string $path
  *   The path to match.
- * @param $patterns
+ * @param string $patterns
  *   String containing a set of patterns separated by \n, \r or \r\n.
  *
- * @return
+ * @return int
  *   1 if there is a match, 0 if there is not a match.
  */
 function new_relic_rpm_page_match($path, $patterns) {
-  $regexp = '/^(' . preg_replace(array('/(\r\n?|\n)/', '/\\\\\*/', '/(^|\|)\\\\<front\\\\>($|\|)/'), array('|', '.*', '\1' . preg_quote(variable_get('site_frontpage', 'node'), '/') . '\2'), preg_quote($patterns, '/')) . ')$/';
+  $regexp = '/^(' . preg_replace(array(
+    '/(\r\n?|\n)/',
+    '/\\\\\*/',
+    '/(^|\|)\\\\<front\\\\>($|\|)/',
+  ), array(
+    '|',
+    '.*',
+    '\1' . preg_quote(variable_get('site_frontpage', 'node'), '/') . '\2',
+  ), preg_quote($patterns, '/')) . ')$/';
+
   return preg_match($regexp, $path);
 }
