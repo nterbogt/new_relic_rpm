@@ -96,7 +96,7 @@ function new_relic_rpm_settings($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Use the active menu item to name transactions'),
     '#description' => t('If enabled the path of the active menu item on a request will be used as transaction name in New Relic. This allows you to use fine granular key transaction tracking.'),
-    '#default_value' => variable_get('new_relic_rpm_use_menu_to_name_transactions', FALSE),
+    '#default_value' => variable_get('new_relic_rpm_use_menu_item_as_transaction', FALSE),
   );
 
   $form['new_relic_rpm_add_node_type_to_node_page_paths'] = array(
