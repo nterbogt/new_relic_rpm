@@ -59,6 +59,7 @@ function new_relic_rpm_install() {
 function new_relic_rpm_uninstall() {
 
   // Remove variables.
+  variable_del('new_relic_rpm_add_manual_rum_instrumentation');
   variable_del('new_relic_rpm_track_cron');
   variable_del('new_relic_rpm_ignore_urls');
   variable_del('new_relic_rpm_bg_urls');

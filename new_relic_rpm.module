@@ -220,6 +220,26 @@ function new_relic_rpm_watchdog(array $log_entry) {
 }
 
 /**
+ * Implements hook_preprocess_html().
+ */
+function new_relic_rpm_preprocess_html(&$variables) {
+  // Support RUM monitoring of cached pages by adding the New Relic timing header & footer.
+  if (variable_get('new_relic_rpm_add_manual_rum_instrumentation', FALSE) && new_relic_rpm_extension_installed()) {
+    // drupal_add_html_head() works better than drupal_add_js because it can be weighted earlier in the DOM.
+    // @see http://www.metaltoad.com/blog/new-relic-real-user-monitoring-hooks-drupal
+    drupal_add_html_head(array(
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => newrelic_get_browser_timing_header(FALSE),
+      '#weight' => -999, // Right after charset attribute
+    ), 'newrelic');
+
+    drupal_add_js(newrelic_get_browser_timing_footer(FALSE),
+      array('type' => 'inline', 'scope' => 'footer', 'weight' => 1000));
+  }
+}
+
+/**
  * Tells New Relic if a job should be ignored or counted as a background job.
  */
 function new_relic_rpm_set_job_state($setting) {

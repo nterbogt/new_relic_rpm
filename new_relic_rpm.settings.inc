@@ -46,6 +46,13 @@ function new_relic_rpm_settings($form, &$form_state) {
     '#default_value' => variable_get('new_relic_rpm_module_deployment', 0),
   );
 
+  $form['new_relic_rpm_add_manual_rum_instrumentation'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Manually add RUM instructions to header and footer'),
+    '#description' => t("When compress cached pages and cache pages for anonymous users is turned on, the New Relic Browser JavaScript is not inserted into the served pages for anonymous users. This is because Drupal's pages are compressed before they are stored in the cache (with gzip), so New Relic's PHP agent does not have a chance to parse any HTML, to add header and footer automatically. In this situation, manual instrumentation provides a better opportunity to capture data for anonymous users. See also @reference_url.", array('@reference_url' => 'https://docs.newrelic.com/docs/agents/php-agent/frameworks-libraries/drupal-specific-functionality#page-load-timing-rum')),
+    '#default_value' => variable_get('new_relic_rpm_add_manual_rum_instrumentation', FALSE),
+  );
+
   $form['new_relic_rpm_ignore_urls'] = array(
     '#type' => 'textarea',
     '#wysiwyg' => FALSE,
