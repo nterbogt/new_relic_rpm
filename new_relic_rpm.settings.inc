@@ -107,6 +107,20 @@ function new_relic_rpm_settings($form, &$form_state) {
     '#default_value' => variable_get('new_relic_rpm_add_node_type_to_node_page_paths', FALSE),
   );
 
+  $form['new_relic_rpm_suppress_module_not_enabled_error_on_cli'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Suppress error message on CLI when New Relic extension is not present'),
+    '#description' => t('By default the module will show an error message when New Relic extension is not present. Suppress that message only when drupal invoked from command line interface, for example by drush.'),
+    '#default_value' => variable_get('new_relic_rpm_suppress_module_not_enabled_error_on_cli', FALSE),
+  );
+
+  $form['new_relic_rpm_suppress_module_not_enabled_error_always'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Always suppress error message when New Relic extension is not present'),
+    '#description' => t('By default the module will show an error message when New Relic extension is not present. Suppress that message always, for example on a local development environment.'),
+    '#default_value' => variable_get('new_relic_rpm_suppress_module_not_enabled_error_always', FALSE),
+  );
+
   return system_settings_form($form);
 }
 

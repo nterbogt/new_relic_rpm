@@ -68,6 +68,11 @@ function new_relic_rpm_uninstall() {
   variable_del('new_relic_rpm_app_name');
   variable_del('new_relic_rpm_use_menu_item_as_transaction');
   variable_del('new_relic_rpm_add_node_type_to_node_page_paths');
+  variable_del('new_relic_rpm_override_exception_handler');
+  variable_del('new_relic_rpm_track_drush');
+  variable_del('new_relic_rpm_watchdog_severities');
+  variable_del('new_relic_rpm_suppress_module_not_enabled_error_always');
+  variable_del('new_relic_rpm_suppress_module_not_enabled_error_on_cli');
 }
 
 /**

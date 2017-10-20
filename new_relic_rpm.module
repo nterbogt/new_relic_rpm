@@ -256,7 +256,9 @@ function new_relic_rpm_extension_installed() {
   if (!$newrelic_module) {
     // Only throw error if we've booted far enough to watchdog.
     // i.e. drush updatedb.
-    if (function_exists('module_implements')) {
+    if (function_exists('module_implements')
+      && !variable_get('new_relic_rpm_suppress_module_not_enabled_error_always', FALSE)
+      && (php_sapi_name() != 'cli' || !variable_get('new_relic_rpm_suppress_module_not_enabled_error_on_cli', FALSE))) {
       watchdog('New Relic RPM', 'New Relic RPM PHP module not enabled.', array(), WATCHDOG_ERROR);
     }
     return FALSE;
