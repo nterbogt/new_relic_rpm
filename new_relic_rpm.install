@@ -12,16 +12,8 @@ function new_relic_rpm_requirements($phase) {
   $requirements = array();
   $t = get_t();
 
-  if ($phase == 'install') {
-    if (!extension_loaded('newrelic')) {
-      $requirements['newrelic'] = array(
-        'title' => $t('none.'),
-        'value' => NULL,
-        'description' => $t('New Relic PHP Library missing. Check <a href="https://newrelic.com/docs/php/new-relic-for-php">Install New Relic for PHP</a> for more information.'),
-        'severity' => REQUIREMENT_ERROR,
-      );
-    }
-  }
+  // We do not verify the extension at install time, to allow for testing when
+  // it is not present.
   if ($phase == 'runtime') {
     $new_relic_loaded = extension_loaded('newrelic');
     $requirements['newrelic'] = array(
