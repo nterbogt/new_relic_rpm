@@ -109,6 +109,16 @@ function new_relic_rpm_init() {
         newrelic_name_transaction($name);
       }
     }
+
+    // This cannot be in hook_boot because we need user_has_role().
+    $ignored_roles = variable_get('new_relic_rpm_ignored_roles', array());
+    if (!empty($ignored_roles)) {
+      foreach ($ignored_roles as $role_id) {
+        if (user_has_role($role_id)) {
+          return new_relic_rpm_set_job_state('ignore');
+        }
+      }
+    }
   }
 }
 
@@ -152,30 +162,34 @@ function _new_relic_rpm_exception_handler($exception) {
  * This is used to set various RPM settings by URL.
  */
 function new_relic_rpm_boot() {
-
   $ignore_urls = variable_get('new_relic_rpm_ignore_urls', '');
   $bg_urls = variable_get('new_relic_rpm_bg_urls', '');
   $exclu_urls = variable_get('new_relic_rpm_exclusive_urls', '');
+  $job_state = '';
 
-  // Handle cases where this getting called from command line and q isn't set.
+  // Handles cases where this is getting called from the command line and q
+  // isn't set.
   $path = isset($_GET['q']) ? $_GET['q'] : '';
 
-  if (!empty($exclu_urls)) {
-    if (!new_relic_rpm_page_match($path, $exclu_urls)) {
-      return new_relic_rpm_set_job_state('ignore');
-    }
+  if (!empty($exclu_urls)
+    && !new_relic_rpm_page_match($path, $exclu_urls)
+  ) {
+    $job_state = 'ignore';
+  }
+  elseif (!empty($ignore_urls)
+    && new_relic_rpm_page_match($path, $ignore_urls)) {
+    $job_state = 'ignore';
   }
 
-  if (!empty($ignore_urls)) {
-    if (new_relic_rpm_page_match($path, $ignore_urls)) {
-      return new_relic_rpm_set_job_state('ignore');
-    }
+  if ($job_state !== 'ignore'
+    && !empty($bg_urls)
+    && new_relic_rpm_page_match($path, $bg_urls)
+  ) {
+    $job_state = 'bg';
   }
 
-  if (!empty($bg_urls)) {
-    if (new_relic_rpm_page_match($path, $bg_urls)) {
-      return new_relic_rpm_set_job_state('bg');
-    }
+  if ($job_state !== '') {
+    new_relic_rpm_set_job_state($job_state);
   }
 }
 

@@ -61,6 +61,16 @@ function new_relic_rpm_settings($form, &$form_state) {
     '#default_value' => variable_get('new_relic_rpm_ignore_urls', ''),
   );
 
+  $form['new_relic_rpm_ignored_roles'] = array(
+    '#type' => 'select',
+    '#multiple' => TRUE,
+    '#title' => t('Ignored Roles'),
+    '#required' => FALSE,
+    '#options' => user_roles(),
+    '#description' => t('Select roles you wish New Relic RPM to ignore.'),
+    '#default_value' => variable_get('new_relic_rpm_ignored_roles', array()),
+  );
+
   $form['new_relic_rpm_bg_urls'] = array(
     '#type' => 'textarea',
     '#wysiwyg' => FALSE,
