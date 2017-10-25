@@ -18,7 +18,7 @@ function new_relic_rpm_drush_init() {
       return;
     }
 
-    // Add custom paramter, telling the drush command executed.
+    // Add custom parameter, telling the drush command executed.
     $command = drush_get_command();
     $drush_command = array_merge(array($command['command']), $command['arguments']);
     newrelic_add_custom_parameter('Drush command', implode(' ', $drush_command));
