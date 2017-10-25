@@ -83,14 +83,14 @@ function new_relic_rpm_settings($form, &$form_state) {
     '#type' => 'textarea',
     '#wysiwyg' => FALSE,
     '#title' => t('Exclusive URLs'),
-    '#description' => t('Enter URLs you wish exclusively track. This is usefull for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
+    '#description' => t('Enter URLs you wish to exclusively track. This is useful for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
     '#default_value' => variable_get('new_relic_rpm_exclusive_urls', ''),
   );
 
   $form['new_relic_rpm_api_key'] = array(
     '#type' => 'textfield',
     '#title' => t('API Key'),
-    '#description' => t('Enter your New Relic API key if you wish to view reports and analysis within Drupal'),
+    '#description' => t('Enter your New Relic API key if you wish to view reports and analysis within Drupal.'),
     '#default_value' => variable_get('new_relic_rpm_api_key', ''),
   );
 
@@ -106,14 +106,14 @@ function new_relic_rpm_settings($form, &$form_state) {
   $form['new_relic_rpm_override_exception_handler'] = array(
     '#type' => 'checkbox',
     '#title' => t('Override exception handler'),
-    '#description' => t('Check to override default Drupal exception handler and to have exceptions passed to New Relic'),
+    '#description' => t('Check to override default Drupal exception handler and to have exceptions passed to New Relic.'),
     '#default_value' => variable_get('new_relic_rpm_override_exception_handler', FALSE),
   );
 
   $form['new_relic_rpm_use_menu_item_as_transaction'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use the active menu item to name transactions'),
-    '#description' => t('If enabled the path of the active menu item on a request will be used as transaction name in New Relic. This allows you to use fine granular key transaction tracking.'),
+    '#description' => t('If enabled the path of the active menu item on a request will be used as a transaction name in New Relic. This allows you to use fine granular key transaction tracking.'),
     '#default_value' => variable_get('new_relic_rpm_use_menu_item_as_transaction', FALSE),
   );
 
@@ -181,7 +181,7 @@ function new_relic_rpm_deploy($form, &$form_state) {
 }
 
 /**
- * FormAPI sumbit callback for the manual deployment creation.
+ * FormAPI submit callback for the manual deployment creation.
  */
 function new_relic_rpm_deploy_submit($form, &$form_state) {
 
