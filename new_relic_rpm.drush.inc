@@ -13,7 +13,7 @@ function new_relic_rpm_drush_init() {
     /** @var \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter */
     $adapter = \Drupal::service('new_relic_rpm.adapter');
 
-    // Add custom paramter, telling the drush command executed.
+    // Add custom parameter, telling the drush command executed.
     $command = drush_get_command();
     $drush_command = array_merge([$command['command']], $command['arguments']);
     $adapter->addCustomParameter('Drush command', implode(' ', $drush_command));
@@ -34,7 +34,7 @@ function new_relic_rpm_drush_command() {
     'description' => dt('Notify New Relic of a deployment.'),
     'arguments' => [
       'user' => dt('Optional. User doing the deploy.'),
-      'description' => dt('Optional. A brief describing of the deployment.'),
+      'description' => dt('Optional. A brief description of the deployment.'),
       'changelog' => dt('Optional. A list of changes for this deployment.'),
       'revision' => dt('Optional. Revision id of the deployment.'),
     ],
