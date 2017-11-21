@@ -7,6 +7,7 @@
 
 use Drupal\new_relic_rpm\Timer;
 use Drupal\views\ViewExecutable;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_cron().
@@ -155,4 +156,18 @@ function new_relic_rpm_curl($url, $post = []) {
   }
 
   return $return_data;
+}
+
+/**
+ * Implements hook_help().
+ */
+function new_relic_rpm_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.new_relic_rpm':
+      return t('<p>This module\'s purpose is to enhance New Relic RPM\'s integration with Drupal and bring visibility of your website\'s performance into Drupal. It also allows you to perform some tasks pertaining to New Relic\'s monitoring of your site from within the Drupal website.</p>
+      <p>See the <a href=":project_page">project page on Drupal.org</a> for more details.</p>',
+        [
+          ':project_page' => 'https://www.drupal.org/project/new_relic_rpm',
+        ]);
+  }
 }
