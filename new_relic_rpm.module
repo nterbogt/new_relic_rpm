@@ -6,6 +6,19 @@
  */
 
 /**
+ * Implements hook_help().
+ */
+function new_relic_rpm_help($path, $arg) {
+  print_r($path);
+  switch ($path) {
+    case 'admin/help#new_relic_rpm':
+      $output = '<p>' . t("This module's purpose is to enhance New Relic RPM's integration with Drupal and bring visibility of your website's performance into Drupal. It also allows you to perform some tasks pertaining to New Relic's monitoring of your site from within the Drupal website.") . '</p>';
+      $output .= '<p>' . t('See the <a href="@project_page">project page on Drupal.org</a> for more details.', array('@project_page' => 'https://www.drupal.org/project/new_relic_rpm')) . '</p>';
+      return $output;
+  }
+}
+
+/**
  * Implements hook_menu().
  */
 function new_relic_rpm_menu() {
