@@ -61,10 +61,10 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#title' => t('Track module activation as deployment'),
       '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a module is enabled or disabled. This will help you track before and after statistics.'),
       '#options' => [
-        '1' => t('Enable'),
-        '0' => t('Disable'),
+        1 => t('Enable'),
+        0 => t('Disable'),
       ],
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('module_deployment'),
+      '#default_value' => (int) \Drupal::config('new_relic_rpm.settings')->get('module_deployment'),
     ];
 
     $form['ignore_urls'] = [
