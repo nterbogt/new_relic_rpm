@@ -23,9 +23,12 @@ function new_relic_rpm_requirements($phase) {
       'severity' => $new_relic_loaded ? REQUIREMENT_OK : REQUIREMENT_ERROR,
     ];
     $api_key = \Drupal::config('new_relic_rpm.settings')->get('api_key');
+    $settings_url = Url::fromRoute('new_relic_rpm.settings')->toString();
     $requirements['newrelic_apikey'] = [
       'title' => t('New Relic API key'),
-      'value' => ($api_key == '' ? t('Not set') : t('Available')) . ' (' . \Drupal::l(t('Configure'), Url::fromRoute('new_relic_rpm.settings')) . ')',
+      'value' => ($api_key == '' ?
+        t('Not set (<a href=":configure">configure</a>)', [':configure' => $settings_url]) :
+        t('Available (<a href=":configure">configure</a>)', [':configure' => $settings_url])),
       'severity' => $api_key == '' ? REQUIREMENT_INFO : REQUIREMENT_OK,
     ];
 
