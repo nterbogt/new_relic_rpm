@@ -13,10 +13,21 @@ services:
         name: logger
   new_relic_rpm.request_subscriber:
     class: Drupal\new_relic_rpm\EventSubscriber\NewRelicRequestSubscriber
-    arguments: ['@new_relic_rpm.adapter', '@path.matcher', '@config.factory', '@path.current', '@current_route_match']
+    arguments: ['@new_relic_rpm.adapter', '@path.matcher', '@config.factory', '@path.current']
     tags:
       -
         name: event_subscriber
+
+  new_relic_rpm.router_subscriber:
+    class: Drupal\new_relic_rpm\EventSubscriber\RoutingTransactionNameSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  newrelic.route_enhancer.transaction_name:
+    class: Drupal\new_relic_rpm\RouteEnhancer\TransactionNameEnhancer
+    arguments: ['@controller_resolver']
+    tags:
+      - { name: route_enhancer, priority: -500 }
 
   new_relic_rpm.adapter:
     class: Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface

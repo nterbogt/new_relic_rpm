@@ -5,7 +5,6 @@ namespace Drupal\new_relic_rpm\EventSubscriber;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Path\PathMatcherInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -46,13 +45,6 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
   protected $currentPathStack;
 
   /**
-   * An object providing information about the current route.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected $routeMatch;
-
-  /**
    * A flag whether the master request was processed.
    *
    * @var bool
@@ -70,14 +62,11 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    *   The object we use to get our settings.
    * @param \Drupal\Core\Path\CurrentPathStack $current_path_stack
    *   An object representing the current URL path of the request.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   An object providing information about the current route.
    */
-  public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack, RouteMatchInterface $route_match) {
+  public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack) {
     $this->adapter = $adapter;
     $this->pathMatcher = $path_matcher;
     $this->config = $config_factory->get('new_relic_rpm.settings');
-    $this->routeMatch = $route_match;
     $this->currentPathStack = $current_path_stack;
   }
 
@@ -129,9 +118,10 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
     }
 
     // If the path was not ignored, set the transaction mame.
-    // @todo: Make this configurable? New relic currently provides completely
-    // bogus transaction names, what it tries to do is the controller name.
-    $this->adapter->setTransactionName($this->routeMatch->getRouteName());
+    if ($name = $event->getRequest()->attributes->get('_transaction_name')) {
+      $this->adapter->setTransactionName($name);
+    }
+
     $this->processedMasterRequest = TRUE;
   }
 
