@@ -2,6 +2,7 @@
 
 namespace Drupal\new_relic_rpm\Logger;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
@@ -37,20 +38,47 @@ class NewRelicLogger implements LoggerInterface {
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
    *   The new relic adapter.
    */
-  public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter) {
+  public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter, ConfigFactoryInterface $configFactory) {
     $this->parser = $parser;
     $this->adapter = $adapter;
+    $this->config = $configFactory;
+  }
+
+  /**
+   * Check whether we should log the message or not based on the level.
+   *
+   * @param int $level
+   *   The RFC 5424 log level.
+   *
+   * @return bool
+   *   Indicator of whether the message should be logged or not.
+   */
+  private function shouldLog($level) {
+    $validLevels = $this->config->get('new_relic_rpm.settings')->get('watchdog_severities');
+    return in_array($level, $validLevels);
+  }
+
+  /**
+   * Get a human readable severity name for an RFC log level.
+   *
+   * @param int $level
+   *  The RFC 5424 log level.
+   *
+   * @return string
+   *   The human readable severity name.
+   */
+  private function getSeverityName($level) {
+    $levels = RfcLogLevel::getLevels();
+    if(isset($levels[$level])) {
+      return $levels[$level]->getUntranslatedString();
+    }
+    return 'Unknown';
   }
 
   /**
    * {@inheritdoc}
    */
   public function log($level, $message, array $context = []) {
-    // Don't do anything if the new relic extension is not available.
-    if (!function_exists('newrelic_notice_error')) {
-      return;
-    }
-
     $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
 
     // Skip if already logged.
@@ -60,24 +88,22 @@ class NewRelicLogger implements LoggerInterface {
     }
 
     // Check if the severity is supposed to be logged.
-    if (!in_array($level, \Drupal::config('new_relic_rpm.settings')->get('watchdog_severities'))) {
+    if(!$this->shouldLog($level)) {
       return;
     }
 
-    $severity_list = RfcLogLevel::getLevels();
 
-    $message = "@message | Severity: (@severity) @severity_desc | Type: @type | Request URI:  @request_uri | Referrer URI: @referer_uri | User: (@uid) @name | IP Address: @ip";
+    $format = "@message | Severity: (@severity) @severity_desc | Type: @type | Request URI: @request_uri | Referrer URI: @referer_uri | User: @uid | IP Address: @ip";
 
-    $message = strtr($message, [
+    $message = strtr($format, [
       '@severity' => $level,
-      '@severity_desc' => $severity_list[$level],
+      '@severity_desc' => $this->getSeverityName($level),
       '@type' => $context['channel'],
       '@ip' => $context['ip'],
       '@request_uri' => $context['request_uri'],
       '@referer_uri' => $context['referer'],
       '@uid' => $context['uid'],
-      '@name' => $context['user']->getUsername(),
-      '@message' => strip_tags(strtr($context['message'], $message_placeholders)),
+      '@message' => strip_tags(strtr($message, $message_placeholders)),
     ]);
 
     $this->adapter->logError($message);

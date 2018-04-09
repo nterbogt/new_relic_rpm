@@ -7,7 +7,7 @@ services:
         name: event_subscriber
   new_relic_rpm.logger:
     class: Drupal\new_relic_rpm\Logger\NewRelicLogger
-    arguments: ['@logger.log_message_parser', '@new_relic_rpm.adapter']
+    arguments: ['@logger.log_message_parser', '@new_relic_rpm.adapter', '@config.factory']
     tags:
       -
         name: logger
