@@ -59,7 +59,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
     $form['module_deployment'] = [
       '#type' => 'select',
       '#title' => t('Track module activation as deployment'),
-      '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a module is enabled or disabled. This will help you track before and after statistics.'),
+      '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a module is installed or uninstalled. This will help you track before and after statistics.'),
       '#options' => [
         1 => t('Enable'),
         0 => t('Disable'),
