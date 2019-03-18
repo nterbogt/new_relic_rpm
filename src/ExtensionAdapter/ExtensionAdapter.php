@@ -27,14 +27,14 @@ class ExtensionAdapter implements NewRelicAdapterInterface {
    * {@inheritdoc}
    */
   public function logException(\Exception $e) {
-    newrelic_notice_error(NULL, $e);
+    newrelic_notice_error($e);
   }
 
   /**
    * {@inheritdoc}
    */
   public function logError($message) {
-    newrelic_notice_error(NULL, $message);
+    newrelic_notice_error($message);
   }
 
   /**
