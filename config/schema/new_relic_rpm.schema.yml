@@ -8,6 +8,10 @@ new_relic_rpm.settings:
       type: string
     module_deployment:
       type: boolean
+    ignore_roles:
+      type: sequence
+      sequence:
+        type: string
     ignore_urls:
       type: string
     bg_urls:

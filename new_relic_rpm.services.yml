@@ -13,7 +13,7 @@ services:
         name: logger
   new_relic_rpm.request_subscriber:
     class: Drupal\new_relic_rpm\EventSubscriber\NewRelicRequestSubscriber
-    arguments: ['@new_relic_rpm.adapter', '@path.matcher', '@config.factory', '@path.current']
+    arguments: ['@new_relic_rpm.adapter', '@path.matcher', '@config.factory', '@path.current', '@current_route_match', '@current_user']
     tags:
       -
         name: event_subscriber

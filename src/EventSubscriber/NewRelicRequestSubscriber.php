@@ -5,6 +5,8 @@ namespace Drupal\new_relic_rpm\EventSubscriber;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Path\PathMatcherInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -52,6 +54,14 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
   protected $processedMasterRequest = FALSE;
 
   /**
+   * The current user account.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected $currentUser;
+
+
+  /**
    * Constructs a subscriber.
    *
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
@@ -63,11 +73,12 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Path\CurrentPathStack $current_path_stack
    *   An object representing the current URL path of the request.
    */
-  public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack) {
+  public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack, RouteMatchInterface $route_match, AccountInterface $current_user) { 
     $this->adapter = $adapter;
     $this->pathMatcher = $path_matcher;
     $this->config = $config_factory->get('new_relic_rpm.settings');
     $this->currentPathStack = $current_path_stack;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -94,9 +105,19 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    $ignore_roles = $this->config->get('ignore_roles');
     $ignore_urls = $this->config->get('ignore_urls');
     $bg_urls = $this->config->get('bg_urls');
     $exclude_urls = $this->config->get('exclusive_urls');
+
+    $user_roles = $this->currentUser->getRoles();
+    if (!empty($ignore_roles)) {
+      foreach ($ignore_roles as $ignored_role) {
+        if (in_array($ignored_role, $user_roles)) {
+          return $this->adapter->setTransactionState(NewRelicAdapterInterface::STATE_IGNORE);
+        }
+      }
+    }
 
     $path = ltrim($this->currentPathStack->getPath(), '/');
     if (!empty($exclude_urls)) {

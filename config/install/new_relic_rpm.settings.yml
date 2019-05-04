@@ -1,6 +1,7 @@
 track_drush: norm
 track_cron: norm
 module_deployment: false
+ignore_roles: { }
 ignore_urls: ''
 bg_urls: ''
 exclusive_urls: ''

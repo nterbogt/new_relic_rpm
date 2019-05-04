@@ -67,6 +67,16 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => (int) \Drupal::config('new_relic_rpm.settings')->get('module_deployment'),
     ];
 
+    $roles = user_role_names();
+    $form['ignore_roles'] = [
+      '#type' => 'select',
+      '#multiple' => TRUE,
+      '#title' => t('Ignore Roles'),
+      '#description' => t('Select roles that you wish to be ignored on the New Relic RPM dashboards. Any user with at least one of the selected roles will be ignored.'),
+      '#options' => $roles,
+      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('ignore_roles'),
+    ];
+
     $form['ignore_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
