@@ -5,7 +5,6 @@ namespace Drupal\new_relic_rpm\EventSubscriber;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\Core\Path\PathMatcherInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -60,7 +59,6 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    */
   protected $currentUser;
 
-
   /**
    * Constructs a subscriber.
    *
@@ -72,8 +70,10 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    *   The object we use to get our settings.
    * @param \Drupal\Core\Path\CurrentPathStack $current_path_stack
    *   An object representing the current URL path of the request.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   An object representing the current user.
    */
-  public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack, RouteMatchInterface $route_match, AccountInterface $current_user) { 
+  public function __construct(NewRelicAdapterInterface $adapter, PathMatcherInterface $path_matcher, ConfigFactoryInterface $config_factory, CurrentPathStack $current_path_stack, AccountInterface $current_user) {
     $this->adapter = $adapter;
     $this->pathMatcher = $path_matcher;
     $this->config = $config_factory->get('new_relic_rpm.settings');
@@ -85,6 +85,7 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
+
     // Run after RouterListener, which has priority 32.
     return [KernelEvents::REQUEST => ['onRequest', 30]];
   }
@@ -98,6 +99,7 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
    *   The current response event for the page.
    */
   public function onRequest(GetResponseEvent $event) {
+
     // If this is a sub request, only process it if there was no master
     // request yet. In that case, it is probably a page not found or access
     // denied page.
@@ -110,8 +112,8 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
     $bg_urls = $this->config->get('bg_urls');
     $exclude_urls = $this->config->get('exclusive_urls');
 
-    $user_roles = $this->currentUser->getRoles();
     if (!empty($ignore_roles)) {
+      $user_roles = $this->currentUser->getRoles();
       foreach ($ignore_roles as $ignored_role) {
         if (in_array($ignored_role, $user_roles)) {
           return $this->adapter->setTransactionState(NewRelicAdapterInterface::STATE_IGNORE);
