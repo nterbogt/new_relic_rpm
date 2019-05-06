@@ -37,6 +37,8 @@ class NewRelicLogger implements LoggerInterface {
    *   The parser to use when extracting message variables.
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
    *   The new relic adapter.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The configuration factory used to read new relic settings.
    */
   public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter, ConfigFactoryInterface $configFactory) {
     $this->parser = $parser;
@@ -62,14 +64,14 @@ class NewRelicLogger implements LoggerInterface {
    * Get a human readable severity name for an RFC log level.
    *
    * @param int $level
-   *  The RFC 5424 log level.
+   *   The RFC 5424 log level.
    *
    * @return string
    *   The human readable severity name.
    */
   private function getSeverityName($level) {
     $levels = RfcLogLevel::getLevels();
-    if(isset($levels[$level])) {
+    if (isset($levels[$level])) {
       return $levels[$level]->getUntranslatedString();
     }
     return 'Unknown';
@@ -88,10 +90,9 @@ class NewRelicLogger implements LoggerInterface {
     }
 
     // Check if the severity is supposed to be logged.
-    if(!$this->shouldLog($level)) {
+    if (!$this->shouldLog($level)) {
       return;
     }
-
 
     $format = "@message | Severity: (@severity) @severity_desc | Type: @type | Request URI: @request_uri | Referrer URI: @referer_uri | User: @uid | IP Address: @ip";
 

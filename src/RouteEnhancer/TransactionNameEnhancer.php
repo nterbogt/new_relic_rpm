@@ -4,8 +4,8 @@ namespace Drupal\new_relic_rpm\RouteEnhancer;
 
 use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\Core\Routing\EnhancerInterface;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Route;
 
 /**
  * Enhances routes with a dynamic transaction name.
