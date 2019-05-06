@@ -42,7 +42,7 @@ class RoutingTransactionNameSubscriberTest extends UnitTestCase {
     $entity->bundle()->willReturn('bar');
     $attributes = [
       '_transaction_name' => 'entity.foo.canonical',
-      'foo' => $entity->reveal()
+      'foo' => $entity->reveal(),
     ];
     $request = new Request([], [], $attributes);
     $actualName = RoutingTransactionNameSubscriber::entityBundleRouteTransactionName($request);
@@ -54,7 +54,7 @@ class RoutingTransactionNameSubscriberTest extends UnitTestCase {
     $node_type->id()->willReturn('bar');
     $attributes = [
       '_transaction_name' => 'node.add',
-      'node_type' => $node_type->reveal()
+      'node_type' => $node_type->reveal(),
     ];
     $request = new Request([], [], $attributes);
     $actualName = RoutingTransactionNameSubscriber::nodeAddTransactionName($request);

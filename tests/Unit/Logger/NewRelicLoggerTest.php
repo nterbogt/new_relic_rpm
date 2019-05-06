@@ -19,23 +19,22 @@ class NewRelicLoggerTest extends UnitTestCase {
     'uid' => 1,
   ];
 
-  private function getLogger(array $levels = [], NewRelicAdapterInterface $adapter) {
+  private function getLogger(NewRelicAdapterInterface $adapter, array $levels = []) {
     $parser = new LogMessageParser();
     $config = $this->getConfigFactoryStub([
       'new_relic_rpm.settings' => [
         'watchdog_severities' => $levels,
-      ]
+      ],
     ]);
     return new NewRelicLogger($parser, $adapter, $config);
   }
-
 
   public function testLogsSelectedLevelMessages() {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
       ->logError(Argument::type('string'))
       ->shouldBeCalled();
-    $logger = $this->getLogger([RfcLogLevel::CRITICAL], $adapter->reveal());
+    $logger = $this->getLogger($adapter->reveal(), [RfcLogLevel::CRITICAL]);
     $logger->log(RfcLogLevel::CRITICAL, 'Test', self::$defaultContext);
   }
 
@@ -44,7 +43,7 @@ class NewRelicLoggerTest extends UnitTestCase {
     $adapter
       ->logError()
       ->shouldNotBeCalled();
-    $logger = $this->getLogger([], $adapter->reveal());
+    $logger = $this->getLogger($adapter->reveal());
     $logger->log(RfcLogLevel::CRITICAL, 'Test', self::$defaultContext);
   }
 
@@ -70,7 +69,7 @@ class NewRelicLoggerTest extends UnitTestCase {
       ->logError(Argument::containingString($expectedPart))
       ->shouldBeCalled();
 
-    $logger = $this->getLogger([RfcLogLevel::CRITICAL], $adapter->reveal());
+    $logger = $this->getLogger($adapter->reveal(), [RfcLogLevel::CRITICAL]);
     $logger->log(RfcLogLevel::CRITICAL, 'My Log Message', $context);
   }
 
@@ -80,7 +79,7 @@ class NewRelicLoggerTest extends UnitTestCase {
       ->logError(Argument::containingString('Severity: (8) Unknown'))
       ->shouldBeCalled();
 
-    $logger = $this->getLogger([8], $adapter->reveal());
+    $logger = $this->getLogger($adapter->reveal(), [8]);
     $logger->log(8, 'My Log Message', self::$defaultContext);
   }
 

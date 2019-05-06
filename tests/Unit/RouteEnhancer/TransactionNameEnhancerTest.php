@@ -14,7 +14,7 @@ class TransactionNameEnhancerTest extends UnitTestCase {
   public function getAppliesTests() {
     return [
       [FALSE, new Route('/foo')],
-      [TRUE, new Route('/foo', ['_transaction_name_callback' => TRUE])]
+      [TRUE, new Route('/foo', ['_transaction_name_callback' => TRUE])],
     ];
   }
 
@@ -42,4 +42,5 @@ class TransactionNameEnhancerTest extends UnitTestCase {
     $defaults = $enhancer->enhance($defaults, $request);
     $this->assertEquals('foo_resolved', $defaults['_transaction_name']);
   }
+
 }
