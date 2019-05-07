@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\new_relic_rpm\RouteEnhancer;
+namespace Drupal\Tests\new_relic_rpm\Unit\RouteEnhancer;
 
 use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\new_relic_rpm\RouteEnhancer\TransactionNameEnhancer;

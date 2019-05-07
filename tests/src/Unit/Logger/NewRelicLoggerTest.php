@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\new_relic_rpm\Logger;
+namespace Drupal\Tests\new_relic_rpm\Unit\Logger;
 
 use Drupal\Core\Logger\LogMessageParser;
 use Drupal\Core\Logger\RfcLogLevel;
