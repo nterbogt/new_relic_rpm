@@ -11,8 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * @coversDefaultClass \Drupal\new_relic_rpm\EventSubscriber\RoutingTransactionNameSubscriber
+ * @group new_relic_rpm
+ */
 class RoutingTransactionNameSubscriberTest extends UnitTestCase {
 
+  /**
+   * @covers ::addTransactionNamesToRoutes
+   */
   public function testSetsTransactionNameForAllRoutes() {
     $collection = new RouteCollection();
     $collection->add('foo', new Route('/foo'));
@@ -24,6 +31,9 @@ class RoutingTransactionNameSubscriberTest extends UnitTestCase {
     $this->assertEquals('foo', $actualName);
   }
 
+  /**
+   * @covers ::addTransactionNamesToRoutes
+   */
   public function testSetsTransactionCallbackOnDynamicRoutes() {
     $collection = new RouteCollection();
     $collection->add('node.add', new Route('/node/add'));
@@ -37,6 +47,9 @@ class RoutingTransactionNameSubscriberTest extends UnitTestCase {
     $this->assertTrue(is_callable($actualCallback));
   }
 
+  /**
+   * @covers ::entityBundleRouteTransactionName
+   */
   public function testEntityRouteTransactionName() {
     $entity = $this->prophesize(EntityInterface::class);
     $entity->bundle()->willReturn('bar');
@@ -49,6 +62,9 @@ class RoutingTransactionNameSubscriberTest extends UnitTestCase {
     $this->assertEquals('entity.foo.canonical:bar', $actualName);
   }
 
+  /**
+   * @covers ::nodeAddTransactionName
+   */
   public function testNodeAddRouteTransactionName() {
     $node_type = $this->prophesize(NodeTypeInterface::class);
     $node_type->id()->willReturn('bar');

@@ -9,9 +9,13 @@ use Drupal\new_relic_rpm\Logger\NewRelicLogger;
 use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 
+/**
+ * @coversDefaultClass \Drupal\new_relic_rpm\Logger\NewRelicLogger
+ * @group new_relic_rpm
+ */
 class NewRelicLoggerTest extends UnitTestCase {
 
-  static $defaultContext = [
+  private static $defaultContext = [
     'channel' => 'mytype',
     'ip' => '127.0.0.1',
     'request_uri' => '/foo',
@@ -48,7 +52,6 @@ class NewRelicLoggerTest extends UnitTestCase {
   }
 
   public function getMessageTests() {
-
     return [
       ['My Log Message |', self::$defaultContext],
       ['Severity: (2) Critical |', self::$defaultContext],
