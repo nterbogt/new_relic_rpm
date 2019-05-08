@@ -66,7 +66,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
       ],
       '#default_value' => (int) \Drupal::config('new_relic_rpm.settings')->get('module_deployment'),
     ];
-    
+
     $form['config_import'] = [
       '#type' => 'select',
       '#title' => t('Track configuration imports as deployment'),

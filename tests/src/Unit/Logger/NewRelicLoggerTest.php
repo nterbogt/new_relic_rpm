@@ -23,6 +23,17 @@ class NewRelicLoggerTest extends UnitTestCase {
     'uid' => 1,
   ];
 
+  /**
+   * Get a preconfigured logger.
+   *
+   * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
+   *   The adapter to use.
+   * @param array $levels
+   *   The log levels to report.
+   *
+   * @return \Drupal\new_relic_rpm\Logger\NewRelicLogger
+   *   A new logger instance.
+   */
   private function getLogger(NewRelicAdapterInterface $adapter, array $levels = []) {
     $parser = new LogMessageParser();
     $config = $this->getConfigFactoryStub([
@@ -33,6 +44,9 @@ class NewRelicLoggerTest extends UnitTestCase {
     return new NewRelicLogger($parser, $adapter, $config);
   }
 
+  /**
+   * Test that log levels requested are logged.
+   */
   public function testLogsSelectedLevelMessages() {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
@@ -42,6 +56,9 @@ class NewRelicLoggerTest extends UnitTestCase {
     $logger->log(RfcLogLevel::CRITICAL, 'Test', self::$defaultContext);
   }
 
+  /**
+   * Test that log levels not requested are ignored.
+   */
   public function testIgnoresUnselectedLevelMessages() {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
@@ -51,6 +68,9 @@ class NewRelicLoggerTest extends UnitTestCase {
     $logger->log(RfcLogLevel::CRITICAL, 'Test', self::$defaultContext);
   }
 
+  /**
+   * Data source for tests.
+   */
   public function getMessageTests() {
     return [
       ['My Log Message |', self::$defaultContext],
@@ -64,6 +84,8 @@ class NewRelicLoggerTest extends UnitTestCase {
   }
 
   /**
+   * Test that we log a message.
+   *
    * @dataProvider getMessageTests
    */
   public function testCreatesMessage($expectedPart, $context) {
@@ -76,6 +98,9 @@ class NewRelicLoggerTest extends UnitTestCase {
     $logger->log(RfcLogLevel::CRITICAL, 'My Log Message', $context);
   }
 
+  /**
+   * Test that an unknown log level is handled.
+   */
   public function testHandlesUnknownLevel() {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
