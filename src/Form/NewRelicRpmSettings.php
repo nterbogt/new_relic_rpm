@@ -77,6 +77,17 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('ignore_roles'),
     ];
 
+    $form['config_import'] = [
+      '#type' => 'select',
+      '#title' => t('Track configuration imports as deployment'),
+      '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a set of configuration is imported. This will help you track before and after statistics.'),
+      '#options' => [
+        1 => t('Enable'),
+        0 => t('Disable'),
+      ],
+      '#default_value' => (int) \Drupal::config('new_relic_rpm.settings')->get('config_import'),
+    ];
+
     $form['ignore_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,

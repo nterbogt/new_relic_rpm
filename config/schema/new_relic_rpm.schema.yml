@@ -8,6 +8,8 @@ new_relic_rpm.settings:
       type: string
     module_deployment:
       type: boolean
+    config_import:
+      type: boolean
     ignore_roles:
       type: sequence
       sequence:

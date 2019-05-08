@@ -5,6 +5,7 @@ services:
     tags:
       -
         name: event_subscriber
+
   new_relic_rpm.logger:
     class: Drupal\new_relic_rpm\Logger\NewRelicLogger
     arguments: ['@logger.log_message_parser', '@new_relic_rpm.adapter', '@config.factory']
@@ -23,6 +24,13 @@ services:
     class: Drupal\new_relic_rpm\EventSubscriber\RoutingTransactionNameSubscriber
     tags:
       - { name: event_subscriber }
+
+  new_relic_rpm.config_subscriber:
+    class: Drupal\new_relic_rpm\EventSubscriber\NewRelicConfigSubscriber
+    arguments: ['@new_relic_rpm.adapter', '@config.factory', '@current_user']
+    tags:
+      -
+        name: event_subscriber
 
   newrelic.route_enhancer.transaction_name:
     class: Drupal\new_relic_rpm\RouteEnhancer\TransactionNameEnhancer
