@@ -41,3 +41,7 @@ services:
   new_relic_rpm.adapter:
     class: Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface
     factory: Drupal\new_relic_rpm\ExtensionAdapter\AdapterFactory::getAdapter
+
+  new_relic_rpm.client:
+    class: Drupal\new_relic_rpm\Client\NewRelicApiClient
+    arguments: ['@config.factory', '@http_client', '@serialization.json', '@logger.factory']

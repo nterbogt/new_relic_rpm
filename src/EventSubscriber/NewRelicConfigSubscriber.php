@@ -8,7 +8,6 @@ use Drupal\Core\Config\ConfigImporterEvent;
 use Drupal\Core\Config\ConfigEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 
 /**
  * Config event listener to mark deployments when a user imports configuration.
@@ -67,60 +66,52 @@ class NewRelicConfigSubscriber implements EventSubscriberInterface {
    *   The current config event that we are responding to.
    */
   public function onImport(ConfigImporterEvent $event) {
-    $config_import = $this->config->get('config_import');
+    if (!$this->config->get('config_import')) {
+      return;
+    }
 
-    if ($config_import) {
-      $changes = $event->getChangelist();
+    $changes = $event->getChangelist();
 
-      $name = $this->currentUser->getAccountName();
-      $description = t('A configuration import was run on the site.');
-      $changelog = '';
+    $name = $this->currentUser->getAccountName();
+    $description = t('A configuration import was run on the site.');
+    $changelog = '';
 
-      if (!empty($changes['create'])) {
-        $changelog .= 'Configurations created:
+    if (!empty($changes['create'])) {
+      $changelog .= 'Configurations created:
 ';
-        foreach ($changes['create'] as $config_key) {
-          $changelog .= $config_key . '
+      foreach ($changes['create'] as $config_key) {
+        $changelog .= $config_key . '
 ';
-        }
-      }
-      if (!empty($changes['update'])) {
-        $changelog .= 'Configurations updated:
-';
-        foreach ($changes['update'] as $config_key) {
-          $changelog .= $config_key . '
-';
-        }
-      }
-      if (!empty($changes['delete'])) {
-        $changelog .= 'Configurations deleted:
-';
-        foreach ($changes['delete'] as $config_key) {
-          $changelog .= $config_key . '
-';
-        }
-      }
-      if (!empty($changes['rename'])) {
-        $changelog .= 'Configurations renamed:
-';
-        foreach ($changes['rename'] as $config_key) {
-          $changelog .= $config_key . '
-';
-        }
-      }
-
-      $deployments = _new_relic_rpm_deploy($name, $description, $changelog);
-
-      if (strlen($deployments) > 20) {
-        \Drupal::logger('new_relic_rpm')->info(t('New Relic RPM deployment created successfully'));
-      }
-      else {
-        \Drupal::logger('new_relic_rpm')->error(t(
-          'New Relic RPM deployment failed to be created. Please ensure you have your account configured on the <a href="@settings">New Relic RPM Drupal admin page</a>.',
-          ['@settings' => Url::fromRoute('new_relic_rpm.settings')]
-        ));
       }
     }
+    if (!empty($changes['update'])) {
+      $changelog .= 'Configurations updated:
+';
+      foreach ($changes['update'] as $config_key) {
+        $changelog .= $config_key . '
+';
+      }
+    }
+    if (!empty($changes['delete'])) {
+      $changelog .= 'Configurations deleted:
+';
+      foreach ($changes['delete'] as $config_key) {
+        $changelog .= $config_key . '
+';
+      }
+    }
+    if (!empty($changes['rename'])) {
+      $changelog .= 'Configurations renamed:
+';
+      foreach ($changes['rename'] as $config_key) {
+        $changelog .= $config_key . '
+';
+      }
+    }
+
+    /** @var \Drupal\new_relic_rpm\Client\NewRelicApiClient $client */
+    $client = \Drupal::service('new_relic_rpm.client');
+    $client->createDeployment('config_import', $description, $name, $changelog);
   }
 
 }
