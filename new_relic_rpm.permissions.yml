@@ -1,6 +1,4 @@
-'administer new relic rpm':
+administer new relic rpm:
   title: 'Administer new relic rpm'
-'view new relic rpm reports':
-  title: 'View new relic rpm reports'
-'create new relic rpm deployments':
+create new relic rpm deployments:
   title: 'Create new relic rpm deployments'
