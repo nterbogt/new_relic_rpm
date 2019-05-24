@@ -5,7 +5,7 @@
  * Drupal module implementing New Relic.
  */
 
-use Drupal\new_relic_rpm\Timer;
+use Drupal\Component\Utility\Timer;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Routing\RouteMatchInterface;
 
@@ -52,11 +52,28 @@ function new_relic_rpm_module_deploy($modules, $action) {
 }
 
 /**
+ * The unique name for the timer based on view details.
+ *
+ * @param \Drupal\views\ViewExecutable $view
+ *   The view to create the timer for.
+ *
+ * @return string
+ *   The timer name.
+ */
+function _new_relic_rpm_views_timer_name(ViewExecutable $view) {
+  $timer_name = 'new_relic_rpm:' . $view->id() . ':' . $view->current_display;
+  if (!empty($view->args)) {
+    $timer_name .= ':' . implode(':' . $view->args);
+  }
+  return $timer_name;
+}
+
+/**
  * Implements hook_views_pre_build().
  */
 function new_relic_rpm_views_pre_build(ViewExecutable $view) {
   if (\Drupal::config('new_relic_rpm.settings')->get('views_log_slow')) {
-    Timer::start('new_relic_rpm:' . $view->id() . ':' . $view->current_display);
+    Timer::start(_new_relic_rpm_views_timer_name($view));
   }
 }
 
@@ -64,15 +81,18 @@ function new_relic_rpm_views_pre_build(ViewExecutable $view) {
  * Implements hook_views_post_render().
  */
 function new_relic_rpm_views_post_render(ViewExecutable $view) {
-  if (\Drupal::config('new_relic_rpm.settings')->get('views_log_slow')) {
-    $execution_time = Timer::stop('new_relic_rpm:' . $view->id() . ':' . $view->current_display);
-    if ($execution_time > \Drupal::config('new_relic_rpm.settings')->get('views_log_threshold')) {
-      \Drupal::service('new_relic_rpm.adapter')->recordCustomEvent('SlowView', [
-        'views_id' => $view->id(),
-        'display_id' => $view->current_display,
-        'execution_time' => $execution_time,
-      ]);
-    }
+  if (!\Drupal::config('new_relic_rpm.settings')->get('views_log_slow')) {
+    return;
+  }
+
+  $execution_timer = Timer::stop(_new_relic_rpm_views_timer_name($view));
+  if ($execution_timer['time'] > \Drupal::config('new_relic_rpm.settings')->get('views_log_threshold')) {
+    \Drupal::service('new_relic_rpm.adapter')->recordCustomEvent('SlowView', [
+      'views_id' => $view->id(),
+      'display_id' => $view->current_display,
+      'execution_time' => $execution_timer['time'],
+      'arguments' => $view->args,
+    ]);
   }
 }
 

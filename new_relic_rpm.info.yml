@@ -3,3 +3,5 @@ description: 'Integration with the New Relic RPM reporting and optimization syst
 core: 8.x
 type: module
 configure: new_relic_rpm.settings
+dependencies:
+  - drupal:system (>=8.5)

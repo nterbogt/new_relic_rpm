@@ -31,6 +31,13 @@ class NewRelicLogger implements LoggerInterface {
   protected $adapter;
 
   /**
+   * The configuration settings for new_relic_rpm.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig $config
+   */
+  protected $config;
+
+  /**
    * Constructs a DbLog object.
    *
    * @param \Drupal\Core\Logger\LogMessageParserInterface $parser
@@ -43,7 +50,7 @@ class NewRelicLogger implements LoggerInterface {
   public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter, ConfigFactoryInterface $configFactory) {
     $this->parser = $parser;
     $this->adapter = $adapter;
-    $this->config = $configFactory;
+    $this->config = $configFactory->get('new_relic_rpm.settings');
   }
 
   /**
@@ -56,7 +63,7 @@ class NewRelicLogger implements LoggerInterface {
    *   Indicator of whether the message should be logged or not.
    */
   private function shouldLog($level) {
-    $validLevels = $this->config->get('new_relic_rpm.settings')->get('watchdog_severities');
+    $validLevels = $this->config->get('watchdog_severities');
     return in_array($level, $validLevels);
   }
 
@@ -81,13 +88,6 @@ class NewRelicLogger implements LoggerInterface {
    * {@inheritdoc}
    */
   public function log($level, $message, array $context = []) {
-    $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
-
-    // Skip if already logged.
-    // @todo
-    if (!empty($context['variables']['new_relic_already_logged'])) {
-      return;
-    }
 
     // Check if the severity is supposed to be logged.
     if (!$this->shouldLog($level)) {
@@ -95,6 +95,7 @@ class NewRelicLogger implements LoggerInterface {
     }
 
     $format = "@message | Severity: (@severity) @severity_desc | Type: @type | Request URI: @request_uri | Referrer URI: @referer_uri | User: @uid | IP Address: @ip";
+    $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
 
     $message = strtr($format, [
       '@severity' => $level,

@@ -73,10 +73,10 @@ class NewRelicRpmDeploy extends FormBase {
     );
 
     if ($deployment) {
-      drupal_set_message($this->t('New Relic RPM deployment created successfully.'), 'status');
+      $this->messenger()->addStatus($this->t('New Relic RPM deployment created successfully.'));
     }
     else {
-      drupal_set_message($this->t('New Relic RPM deployment failed.'), 'error');
+      $this->messenger()->addError($this->t('New Relic RPM deployment failed.'));
     }
   }
 
