@@ -31,11 +31,11 @@ class NewRelicLogger implements LoggerInterface {
   protected $adapter;
 
   /**
-   * The configuration settings for new_relic_rpm.
+   * The configuration factory service.
    *
-   * @var \Drupal\Core\Config\ImmutableConfig $config
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $config;
+  protected $configFactory;
 
   /**
    * Constructs a DbLog object.
@@ -44,13 +44,13 @@ class NewRelicLogger implements LoggerInterface {
    *   The parser to use when extracting message variables.
    * @param \Drupal\new_relic_rpm\ExtensionAdapter\NewRelicAdapterInterface $adapter
    *   The new relic adapter.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory used to read new relic settings.
    */
-  public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter, ConfigFactoryInterface $configFactory) {
+  public function __construct(LogMessageParserInterface $parser, NewRelicAdapterInterface $adapter, ConfigFactoryInterface $config_factory) {
     $this->parser = $parser;
     $this->adapter = $adapter;
-    $this->config = $configFactory->get('new_relic_rpm.settings');
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -63,7 +63,7 @@ class NewRelicLogger implements LoggerInterface {
    *   Indicator of whether the message should be logged or not.
    */
   private function shouldLog($level) {
-    $validLevels = $this->config->get('watchdog_severities');
+    $validLevels = $this->configFactory->get('new_relic_rpm.settings')->get('watchdog_severities');
     return in_array($level, $validLevels);
   }
 
