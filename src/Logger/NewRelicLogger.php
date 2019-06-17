@@ -63,7 +63,7 @@ class NewRelicLogger implements LoggerInterface {
    *   Indicator of whether the message should be logged or not.
    */
   private function shouldLog($level) {
-    $validLevels = $this->configFactory->get('new_relic_rpm.settings')->get('watchdog_severities');
+    $validLevels = $this->configFactory->get('new_relic_rpm.settings')->get('watchdog_severities') ?: [];
     return in_array($level, $validLevels);
   }
 
