@@ -37,4 +37,11 @@ class NullAdapter implements NewRelicAdapterInterface {
    */
   public function recordCustomEvent($name, array $attributes) {}
 
+  /**
+   * {@inheritdoc}
+   */
+  public function disableAutorum() {
+    return NULL;
+  }
+
 }

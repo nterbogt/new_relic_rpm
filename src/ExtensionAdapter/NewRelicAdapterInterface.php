@@ -63,4 +63,12 @@ interface NewRelicAdapterInterface {
    */
   public function recordCustomEvent($name, array $attributes);
 
+  /**
+   * Disable automatic injection of the New Relic Browser snippet.
+   *
+   * @return mixed
+   *   TRUE if called within newrelic transaction. Otherwise NULL.
+   */
+  public function disableAutorum();
+
 }
