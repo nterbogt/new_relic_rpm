@@ -63,7 +63,7 @@ function new_relic_rpm_module_deploy($modules, $action) {
 function _new_relic_rpm_views_timer_name(ViewExecutable $view) {
   $timer_name = 'new_relic_rpm:' . $view->id() . ':' . $view->current_display;
   if (!empty($view->args)) {
-    $timer_name .= ':' . implode(':' . $view->args);
+    $timer_name .= ':' . implode(':', $view->args);
   }
   return $timer_name;
 }
