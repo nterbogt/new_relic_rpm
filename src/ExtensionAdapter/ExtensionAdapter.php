@@ -60,4 +60,11 @@ class ExtensionAdapter implements NewRelicAdapterInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function disableAutorum() {
+    return newrelic_disable_autorum();
+  }
+
 }

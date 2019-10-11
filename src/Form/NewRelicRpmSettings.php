@@ -135,6 +135,13 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('override_exception_handler'),
     ];
 
+    $form['disable_autorum'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Disable Autorum'),
+      '#description' => t('Check to disable the automatic browser tracking inserted by a newrelic apm transaction.'),
+      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('disable_autorum'),
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 

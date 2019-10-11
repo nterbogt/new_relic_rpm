@@ -111,6 +111,11 @@ class NewRelicRequestSubscriber implements EventSubscriberInterface {
     $ignore_urls = $this->config->get('ignore_urls');
     $bg_urls = $this->config->get('bg_urls');
     $exclude_urls = $this->config->get('exclusive_urls');
+    $disable_autorum = $this->config->get('disable_autorum');
+
+    if ($disable_autorum) {
+      $this->adapter->disableAutorum();
+    }
 
     if (!empty($ignore_roles)) {
       $user_roles = $this->currentUser->getRoles();
