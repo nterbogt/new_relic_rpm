@@ -32,8 +32,10 @@ interface NewRelicAdapterInterface {
    *
    * @param string $message
    *   The error message.
+   * @param \Exception|\Throwable $exception
+   *   And optional exception used for providing additional context and trace.
    */
-  public function logError($message);
+  public function logError($message, $exception = NULL);
 
   /**
    * Adds a custom parameter.

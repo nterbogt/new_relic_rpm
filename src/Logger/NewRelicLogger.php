@@ -108,7 +108,7 @@ class NewRelicLogger implements LoggerInterface {
       '@message' => strip_tags(strtr($message, $message_placeholders)),
     ]);
 
-    $this->adapter->logError($message);
+    $this->adapter->logError($message, isset($context['exception']) ? $context['exception'] : NULL);
   }
 
 }
