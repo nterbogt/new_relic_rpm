@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TransactionNameEnhancer implements EnhancerInterface {
 
+  /**
+   * Controller resolver service.
+   *
+   * @var \Drupal\Core\Controller\ControllerResolverInterface
+   */
   private $resolver;
 
   /**

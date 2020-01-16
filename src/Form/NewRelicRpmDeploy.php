@@ -4,7 +4,6 @@ namespace Drupal\new_relic_rpm\Form;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\FormBase;
-use Drupal\Core\Url;
 
 /**
  * Provides a form to allow marking deployments on the New Relic interface.

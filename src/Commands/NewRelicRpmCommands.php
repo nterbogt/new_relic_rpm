@@ -20,7 +20,7 @@ class NewRelicRpmCommands extends DrushCommands {
   /**
    * NewRelicRpmCommands constructor.
    *
-   * @param \Drupal\new_relic_rpm\Client\NewRelicApiClient
+   * @param \Drupal\new_relic_rpm\Client\NewRelicApiClient $api_client
    *   Newrelic API client.
    */
   public function __construct(NewRelicApiClient $api_client) {
@@ -31,11 +31,13 @@ class NewRelicRpmCommands extends DrushCommands {
   /**
    * Mark a deployment in newrelic.
    *
-   * @command new-relic-rpm:deploy
-   * @aliases nrd
-   *
    * @param string $revision
    *   The revision label.
+   * @param array $options
+   *   The options to pass through to the deplopment.
+   *
+   * @command new-relic-rpm:deploy
+   * @aliases nrd
    *
    * @option description
    *   A brief description of the deployment.

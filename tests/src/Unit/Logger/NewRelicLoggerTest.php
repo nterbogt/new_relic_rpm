@@ -124,7 +124,7 @@ class NewRelicLoggerTest extends UnitTestCase {
     $logger = $this->getLogger($adapter->reveal(), [RfcLogLevel::ERROR]);
     $logger->log(RfcLogLevel::ERROR, 'My Log Message', self::$defaultContext + [
       'exception' => $exception,
-      ]);
+    ]);
   }
 
 }

@@ -15,25 +15,53 @@ class NewRelicApiClient {
 
   const API_URL = 'https://api.newrelic.com/v2';
 
-  /** @var string */
+  /**
+   * The API key to connect to newrelic.
+   *
+   * @var string
+   */
   protected $apiKey;
 
-  /** @var \Drupal\Component\Serialization\Json */
+  /**
+   * The serialisation JSON service.
+   *
+   * @var \Drupal\Component\Serialization\Json
+   */
   protected $parser;
 
-  /** @var integer The application ID in newrelic */
+  /**
+   * The application ID in newrelic.
+   *
+   * @var int
+   */
   private $appId;
 
-  /** @var string The application name being used for this instance */
+  /**
+   * The application name being used for this instance.
+   *
+   * @var string
+   */
   private $appName;
 
-  /** @var \GuzzleHttp\Client */
+  /**
+   * The http_client service.
+   *
+   * @var \GuzzleHttp\Client
+   */
   protected $httpClient;
 
-  /** @var \Drupal\Core\Config\ImmutableConfig */
+  /**
+   * A loaded config object for new_relic_rpm.settings.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
   protected $config;
 
-  /** @var \Psr\Log\LoggerInterface */
+  /**
+   * A logger service instance.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
   protected $logger;
 
   /**
@@ -48,7 +76,7 @@ class NewRelicApiClient {
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   For logging notifications to Drupal.
    */
-  function __construct(ConfigFactoryInterface $config_factory, Client $http_client, Json $serialization_json, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, Client $http_client, Json $serialization_json, LoggerChannelFactoryInterface $logger_factory) {
     $this->config = $config_factory->get('new_relic_rpm.settings');
     $this->httpClient = $http_client;
     $this->parser = $serialization_json;
@@ -67,7 +95,7 @@ class NewRelicApiClient {
    *
    * Defaults to the newrelic.appname php configuration value.
    *
-   * @param $name
+   * @param string $name
    *   The name to use.
    */
   public function setAppName($name) {
@@ -146,7 +174,7 @@ class NewRelicApiClient {
    * @param string $changelog
    *   The changelog information.
    *
-   * @return boolean
+   * @return bool
    *   Whether the deployment marker was successful or not.
    */
   public function createDeployment($revision, $description = NULL, $user = NULL, $changelog = NULL) {
@@ -158,7 +186,7 @@ class NewRelicApiClient {
     $post_vars = [
       'deployment' => [
         'revision' => $revision,
-      ]
+      ],
     ];
     if (isset($description)) {
       $post_vars['deployment']['description'] = $description;
@@ -183,7 +211,7 @@ class NewRelicApiClient {
   /**
    * Build the URL for the API.
    *
-   * @param $uri
+   * @param string $uri
    *   The base path.
    * @param array $filters
    *   Request filters.
@@ -191,7 +219,7 @@ class NewRelicApiClient {
    * @return string
    *   The full URL.
    */
-  public function buildUrl($uri, $filters = []) {
+  public function buildUrl($uri, array $filters = []) {
     $url = static::API_URL . $uri . '.json';
     if (empty($filters)) {
       return $url;
@@ -215,6 +243,7 @@ class NewRelicApiClient {
    *   The request method.
    *
    * @return \Psr\Http\Message\ResponseInterface
+   *   A response from the API request.
    *
    * @throws \GuzzleHttp\Exception\GuzzleException
    */
