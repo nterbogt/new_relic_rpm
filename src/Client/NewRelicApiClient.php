@@ -252,7 +252,7 @@ class NewRelicApiClient {
       'headers' => [
         'X-Api-Key' => $this->apiKey,
       ],
-      'filters' => '',
+      'filters' => [],
     ], $options);
     $url = $this->buildUrl($uri, $options['filters']);
     unset($options['filters']);
