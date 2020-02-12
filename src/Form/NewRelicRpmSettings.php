@@ -34,82 +34,82 @@ class NewRelicRpmSettings extends ConfigFormBase {
 
     $form['track_drush'] = [
       '#type' => 'select',
-      '#title' => t('Drush transactions'),
-      '#description' => t('How do you wish RPM to track drush commands?'),
+      '#title' => $this->t('Drush transactions'),
+      '#description' => $this->t('How do you wish RPM to track drush commands?'),
       '#options' => [
-        'ignore' => t('Ignore completely'),
-        'bg' => t('Track as background tasks'),
-        'norm' => t('Track normally'),
+        'ignore' => $this->t('Ignore completely'),
+        'bg' => $this->t('Track as background tasks'),
+        'norm' => $this->t('Track normally'),
       ],
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('track_drush'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('track_drush'),
     ];
 
     $form['track_cron'] = [
       '#type' => 'select',
-      '#title' => t('Cron transactions'),
-      '#description' => t('How do you wish RPM to track cron tasks?'),
+      '#title' => $this->t('Cron transactions'),
+      '#description' => $this->t('How do you wish RPM to track cron tasks?'),
       '#options' => [
-        'ignore' => t('Ignore completely'),
-        'bg' => t('Track as background tasks'),
-        'norm' => t('Track normally'),
+        'ignore' => $this->t('Ignore completely'),
+        'bg' => $this->t('Track as background tasks'),
+        'norm' => $this->t('Track normally'),
       ],
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('track_cron'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('track_cron'),
     ];
 
     $form['module_deployment'] = [
       '#type' => 'select',
-      '#title' => t('Track module activation as deployment'),
-      '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a module is installed or uninstalled. This will help you track before and after statistics.'),
+      '#title' => $this->t('Track module activation as deployment'),
+      '#description' => $this->t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a module is installed or uninstalled. This will help you track before and after statistics.'),
       '#options' => [
-        1 => t('Enable'),
-        0 => t('Disable'),
+        1 => $this->t('Enable'),
+        0 => $this->t('Disable'),
       ],
-      '#default_value' => (int) \Drupal::config('new_relic_rpm.settings')->get('module_deployment'),
+      '#default_value' => (int) $this->config('new_relic_rpm.settings')->get('module_deployment'),
     ];
 
     $form['config_import'] = [
       '#type' => 'select',
-      '#title' => t('Track configuration imports as deployment'),
-      '#description' => t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a set of configuration is imported. This will help you track before and after statistics.'),
+      '#title' => $this->t('Track configuration imports as deployment'),
+      '#description' => $this->t('Turning this on will create a "deployment" on the New Relic RPM dashboard each time a set of configuration is imported. This will help you track before and after statistics.'),
       '#options' => [
-        1 => t('Enable'),
-        0 => t('Disable'),
+        1 => $this->t('Enable'),
+        0 => $this->t('Disable'),
       ],
-      '#default_value' => (int) \Drupal::config('new_relic_rpm.settings')->get('config_import'),
+      '#default_value' => (int) $this->config('new_relic_rpm.settings')->get('config_import'),
     ];
 
     $roles = user_role_names();
     $form['ignore_roles'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
-      '#title' => t('Ignore Roles'),
-      '#description' => t('Select roles that you wish to be ignored on the New Relic RPM dashboards. Any user with at least one of the selected roles will be ignored.'),
+      '#title' => $this->t('Ignore Roles'),
+      '#description' => $this->t('Select roles that you wish to be ignored on the New Relic RPM dashboards. Any user with at least one of the selected roles will be ignored.'),
       '#options' => $roles,
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('ignore_roles'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('ignore_roles'),
     ];
 
     $form['ignore_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
-      '#title' => t('Ignore URLs'),
-      '#description' => t('Enter URLs you wish New Relic RPM to ignore. Enter one URL per line.'),
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('ignore_urls'),
+      '#title' => $this->t('Ignore URLs'),
+      '#description' => $this->t('Enter URLs you wish New Relic RPM to ignore. Enter one URL per line.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('ignore_urls'),
     ];
 
     $form['bg_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
-      '#title' => t('Background URLs'),
-      '#description' => t('Enter URLs you wish to have tracked as background tasks. Enter one URL per line.'),
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('bg_urls'),
+      '#title' => $this->t('Background URLs'),
+      '#description' => $this->t('Enter URLs you wish to have tracked as background tasks. Enter one URL per line.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('bg_urls'),
     ];
 
     $form['exclusive_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
-      '#title' => t('Exclusive URLs'),
-      '#description' => t('Enter URLs you wish to exclusively track. This is useful for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('exclusive_urls'),
+      '#title' => $this->t('Exclusive URLs'),
+      '#description' => $this->t('Enter URLs you wish to exclusively track. This is useful for debugging specific issues. **NOTE** Entering URLs here effectively marks all other URLs as ignored. Leave blank to disable.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('exclusive_urls'),
     ];
 
     $form['api_key'] = [
@@ -122,24 +122,24 @@ class NewRelicRpmSettings extends ConfigFormBase {
     $form['watchdog_severities'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
-      '#title' => t('Forward watchdog messages'),
-      '#description' => t('Select which watchdog severities should be forwarded to New Relic API as errors.'),
+      '#title' => $this->t('Forward watchdog messages'),
+      '#description' => $this->t('Select which watchdog severities should be forwarded to New Relic API as errors.'),
       '#options' => RfcLogLevel::getLevels(),
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('watchdog_severities'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('watchdog_severities'),
     ];
 
     $form['override_exception_handler'] = [
       '#type' => 'checkbox',
-      '#title' => t('Override exception handler'),
-      '#description' => t('Check to override default Drupal exception handler and to have exceptions passed to New Relic.'),
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('override_exception_handler'),
+      '#title' => $this->t('Override exception handler'),
+      '#description' => $this->t('Check to override default Drupal exception handler and to have exceptions passed to New Relic.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('override_exception_handler'),
     ];
 
     $form['disable_autorum'] = [
       '#type' => 'checkbox',
-      '#title' => t('Disable Autorum'),
-      '#description' => t('Check to disable the automatic browser tracking inserted by a newrelic apm transaction.'),
-      '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('disable_autorum'),
+      '#title' => $this->t('Disable Autorum'),
+      '#description' => $this->t('Check to disable the automatic browser tracking inserted by a newrelic apm transaction.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('disable_autorum'),
     ];
 
     return parent::buildForm($form, $form_state);

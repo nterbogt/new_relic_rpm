@@ -25,33 +25,33 @@ class NewRelicRpmDeploy extends FormBase {
 
     $form['revision'] = [
       '#type' => 'textfield',
-      '#title' => t('Revision'),
+      '#title' => $this->t('Revision'),
       '#required' => TRUE,
       '#description' => t('Add a revision number to this deployment.'),
     ];
 
     $form['description'] = [
       '#type' => 'textarea',
-      '#title' => t('Description'),
-      '#description' => t('Provide some notes and description regarding this deployment.'),
+      '#title' => $this->t('Description'),
+      '#description' => $this->t('Provide some notes and description regarding this deployment.'),
     ];
 
     $form['user'] = [
       '#type' => 'textfield',
-      '#title' => t('User'),
-      '#default_value' => \Drupal::currentUser()->getAccountName(),
-      '#description' => t('Enter the name for this deployment of your application. This will be the name shown in your list of deployments on the New Relic RPM website.'),
+      '#title' => $this->t('User'),
+      '#default_value' => $this->currentUser()->getAccountName(),
+      '#description' => $this->t('Enter the name for this deployment of your application. This will be the name shown in your list of deployments on the New Relic RPM website.'),
     ];
 
     $form['changelog'] = [
       '#type' => 'textarea',
-      '#title' => t('Changelog'),
-      '#description' => t('Provide a specific changelog for this deployment.'),
+      '#title' => $this->t('Changelog'),
+      '#description' => $this->t('Provide a specific changelog for this deployment.'),
     ];
 
     $form['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Create Deployment'),
+      '#value' => $this->t('Create Deployment'),
     ];
 
     return $form;
