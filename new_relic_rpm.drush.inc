@@ -2,7 +2,7 @@
 
 /**
  * @file
- * New Relic RPM Drush integration.
+ * New Relic Drush integration.
  */
 
 /**
@@ -53,9 +53,9 @@ function drush_new_relic_rpm_newrelic_deploy($revision, $description = NULL, $us
   $deployment = $client->createDeployment($revision, $description, $user, $changelog);
 
   if ($deployment) {
-    drush_log(dt('New Relic RPM deployment created successfully.'), 'success');
+    drush_log(dt('New Relic deployment created successfully.'), 'success');
   }
   else {
-    drush_log(dt('New Relic RPM deployment failed.'), 'error');
+    drush_log(dt('New Relic deployment failed.'), 'error');
   }
 }

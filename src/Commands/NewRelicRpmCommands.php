@@ -61,10 +61,10 @@ class NewRelicRpmCommands extends DrushCommands {
     $deployment = $this->apiClient->createDeployment($revision, $options['description'], $options['user'], $options['changelog']);
 
     if ($deployment) {
-      $this->output()->writeln('New Relic RPM deployment created successfully.');
+      $this->output()->writeln('New Relic deployment created successfully.');
     }
     else {
-      $this->logger()->error(dt('New Relic RPM deployment failed.'));
+      $this->logger()->error(dt('New Relic deployment failed.'));
     }
   }
 

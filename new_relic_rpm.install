@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install and uninstall functions for the New Relic RPM module.
+ * Install and uninstall functions for the New Relic module.
  */
 
 use Drupal\Core\Url;

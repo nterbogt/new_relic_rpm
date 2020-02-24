@@ -12,7 +12,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 /**
  * Implements hook_cron().
  *
- * This is used to set cron tasks to be not tracked by RPM if so desired.
+ * This is used to set cron tasks to be not tracked by New Relic if so desired.
  */
 function new_relic_rpm_cron() {
   $cron_tracking = \Drupal::config('new_relic_rpm.settings')->get('track_cron');
@@ -34,7 +34,7 @@ function new_relic_rpm_modules_uninstalled($modules) {
 }
 
 /**
- * Log module install/uninstall actions as a deploy call to New Relic RPM.
+ * Log module install/uninstall actions as a deploy call to New Relic.
  */
 function new_relic_rpm_module_deploy($modules, $action) {
   if (!\Drupal::config('new_relic_rpm.settings')->get('module_deployment')) {
@@ -102,7 +102,7 @@ function new_relic_rpm_views_post_render(ViewExecutable $view) {
 function new_relic_rpm_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.new_relic_rpm':
-      return t("<p>This module's purpose is to enhance New Relic RPM's integration with Drupal and bring visibility of your website's performance into Drupal. It also allows you to perform some tasks pertaining to New Relic's monitoring of your site from within the Drupal website.</p>
+      return t("<p>This module's purpose is to enhance New Relic integration with Drupal and bring visibility of your website's performance into Drupal. It also allows you to perform some tasks pertaining to New Relic's monitoring of your site from within the Drupal website.</p>
       <p>See the <a href=\":project_page\">project page on Drupal.org</a> for more details.</p>",
         [
           ':project_page' => 'https://www.drupal.org/project/new_relic_rpm',

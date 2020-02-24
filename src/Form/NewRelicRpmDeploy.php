@@ -40,7 +40,7 @@ class NewRelicRpmDeploy extends FormBase {
       '#type' => 'textfield',
       '#title' => $this->t('User'),
       '#default_value' => $this->currentUser()->getAccountName(),
-      '#description' => $this->t('Enter the name for this deployment of your application. This will be the name shown in your list of deployments on the New Relic RPM website.'),
+      '#description' => $this->t('Enter the name for this deployment of your application. This will be the name shown in your list of deployments on the New Relic website.'),
     ];
 
     $form['changelog'] = [
@@ -72,10 +72,10 @@ class NewRelicRpmDeploy extends FormBase {
     );
 
     if ($deployment) {
-      $this->messenger()->addStatus($this->t('New Relic RPM deployment created successfully.'));
+      $this->messenger()->addStatus($this->t('New Relic deployment created successfully.'));
     }
     else {
-      $this->messenger()->addError($this->t('New Relic RPM deployment failed.'));
+      $this->messenger()->addError($this->t('New Relic deployment failed.'));
     }
   }
 

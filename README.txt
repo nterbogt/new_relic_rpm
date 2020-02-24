@@ -53,31 +53,31 @@ SETTINGS
    3    Track cron tasks the same as any other URL in your application.
 
  * Drush - You have 3 options regarding drush.
-   1    Instruct RPM to ignore drush executions completely and not report
+   1    Instruct New Relic to ignore drush executions completely and not report
         on them.
    2    Mark drush executions as background tasks.
    3    Track drush exeuctions the same as any other URL in your application.
 
  * Module Install/Uninstall - APM allows you to create 'deployments', which are
-   essentially markers where you tell RPM you have made changes to your site.
-   RPM will then allow you to compare a variety of metrics before and after the
-   deployment. Enabling this setting will automatically create a deployment each
-   time you enable or disable a module. A deployment changelog entry is made
-   noting which modules you enabled and/or disabled.
+   essentially markers where you tell New Relic you have made changes to your
+   site. New Relic will then allow you to compare a variety of metrics before
+   and after the deployment. Enabling this setting will automatically create a
+   deployment each time you enable or disable a module. A deployment changelog
+   entry is made noting which modules you enabled and/or disabled.
 
- * Ignore URLs - Enter a list of URLs you wish RPM to ignore and not report on.
-   Use standard Drupal URL listing syntax.
+ * Ignore URLs - Enter a list of URLs you wish New Relic to ignore and not
+   report on. Use standard Drupal URL listing syntax.
 
- * Background URLs - Enter a list of URLs you wish RPM to consider as background
-  tasks. Use standard Drupal URL listing syntax.
+ * Background URLs - Enter a list of URLs you wish New Relic to consider as
+   background tasks. Use standard Drupal URL listing syntax.
 
- * Exclusive URLs - Entering a list of URLs you wish RPM to only track, ignoring
-   all other URLs.
+ * Exclusive URLs - Entering a list of URLs you wish New Relic to only track,
+   ignoring all other URLs.
    If URLs are entered, Ignore URLs and Background URLs are ignored.
    Your selection for cron functionality is unaffected by this setting.
 
- * API Key - Enter your RPM API key here. This is necessary for reporting and
-   deployment tracking functionality.
+ * API Key - Enter your New Relic API key here. This is necessary for reporting
+   and deployment tracking functionality.
 
  * Forward watchdog messages - Configure which watchdog severities are reported
    to New Relic as errors.
@@ -88,15 +88,8 @@ SETTINGS
    exception handler, which allows reporting the correct backtrace of uncatched
    exceptions.
 
- * Disable Autorum - Disables the automatic browser tracking inserted by a
+ * Disable AutoRUM - Disables the automatic browser tracking inserted by a
    New Relic APM transaction.
-
-
-REPORTING
-----------
-
- * The page at admin/reports/new-relic-rpm brings some basic RPM statistics
-   about your site into Drupal.
 
 
 MAINTAINERS

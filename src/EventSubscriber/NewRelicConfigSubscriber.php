@@ -22,7 +22,7 @@ class NewRelicConfigSubscriber implements EventSubscriberInterface {
   protected $adapter;
 
   /**
-   * The configuration for the New Relic RPM module.
+   * The configuration for the New Relic module.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
