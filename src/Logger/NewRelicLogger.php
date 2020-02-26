@@ -37,6 +37,8 @@ class NewRelicLogger implements LoggerInterface {
    */
   protected $configFactory;
 
+  protected $lastLoggedLevel = 8;
+
   /**
    * Constructs a DbLog object.
    *
@@ -56,6 +58,10 @@ class NewRelicLogger implements LoggerInterface {
   /**
    * Check whether we should log the message or not based on the level.
    *
+   * We exclude logging to certain levels through configuration, but we also
+   * send only the latest most severe message we receive. This is because
+   * Newrelic only supports setting one newrelic_notice_error().
+   *
    * @param int $level
    *   The RFC 5424 log level.
    *
@@ -63,6 +69,11 @@ class NewRelicLogger implements LoggerInterface {
    *   Indicator of whether the message should be logged or not.
    */
   private function shouldLog($level) {
+    // Always log the most severe latest message.
+    if ($level > $this->lastLoggedLevel) {
+      return FALSE;
+    }
+
     $validLevels = $this->configFactory->get('new_relic_rpm.settings')->get('watchdog_severities') ?: [];
     return in_array($level, $validLevels);
   }
@@ -93,6 +104,8 @@ class NewRelicLogger implements LoggerInterface {
     if (!$this->shouldLog($level)) {
       return;
     }
+
+    $this->lastLoggedLevel = $level;
 
     // If we were passed an exception, use that instead.
     if (isset($context['exception'])) {
