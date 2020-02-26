@@ -94,6 +94,12 @@ class NewRelicLogger implements LoggerInterface {
       return;
     }
 
+    // If we were passed an exception, use that instead.
+    if (isset($context['exception'])) {
+      $this->adapter->logException($context['exception']);
+      return;
+    }
+
     $format = "@message | Severity: (@severity) @severity_desc | Type: @type | Request URI: @request_uri | Referrer URI: @referer_uri | User: @uid | IP Address: @ip";
     $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
 
@@ -108,7 +114,7 @@ class NewRelicLogger implements LoggerInterface {
       '@message' => strip_tags(strtr($message, $message_placeholders)),
     ]);
 
-    $this->adapter->logError($message, isset($context['exception']) ? $context['exception'] : NULL);
+    $this->adapter->logError($message);
   }
 
 }

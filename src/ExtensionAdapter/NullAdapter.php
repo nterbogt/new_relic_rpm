@@ -20,7 +20,7 @@ class NullAdapter implements NewRelicAdapterInterface {
   /**
    * {@inheritdoc}
    */
-  public function logError($message, $exception = NULL) {}
+  public function logError($message) {}
 
   /**
    * {@inheritdoc}

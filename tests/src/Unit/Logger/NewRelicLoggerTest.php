@@ -50,7 +50,7 @@ class NewRelicLoggerTest extends UnitTestCase {
   public function testLogsSelectedLevelMessages() {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
-      ->logError(Argument::type('string'), NULL)
+      ->logError(Argument::type('string'))
       ->shouldBeCalled();
     $logger = $this->getLogger($adapter->reveal(), [RfcLogLevel::CRITICAL]);
     $logger->log(RfcLogLevel::CRITICAL, 'Test', self::$defaultContext);
@@ -91,7 +91,7 @@ class NewRelicLoggerTest extends UnitTestCase {
   public function testCreatesMessage($expectedPart, $context) {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
-      ->logError(Argument::containingString($expectedPart), NULL)
+      ->logError(Argument::containingString($expectedPart))
       ->shouldBeCalled();
 
     $logger = $this->getLogger($adapter->reveal(), [RfcLogLevel::CRITICAL]);
@@ -104,7 +104,7 @@ class NewRelicLoggerTest extends UnitTestCase {
   public function testHandlesUnknownLevel() {
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
-      ->logError(Argument::containingString('Severity: (8) Unknown'), NULL)
+      ->logError(Argument::containingString('Severity: (8) Unknown'))
       ->shouldBeCalled();
 
     $logger = $this->getLogger($adapter->reveal(), [8]);
@@ -118,7 +118,7 @@ class NewRelicLoggerTest extends UnitTestCase {
     $exception = new \Exception('Some exception to be logged.');
     $adapter = $this->prophesize(NewRelicAdapterInterface::class);
     $adapter
-      ->logError(Argument::Any(), $exception)
+      ->logException($exception)
       ->shouldBeCalled();
 
     $logger = $this->getLogger($adapter->reveal(), [RfcLogLevel::ERROR]);
