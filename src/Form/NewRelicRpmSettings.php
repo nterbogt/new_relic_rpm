@@ -103,6 +103,27 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => $this->config('new_relic_rpm.settings')->get('exclusive_urls'),
     ];
 
+    $form['views'] = [
+      '#type' => 'details',
+      '#title' => t('Views tracking'),
+      '#open' => TRUE,
+    ];
+
+    $form['views']['views_log_slow'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Track slow views'),
+      '#description' => $this->t('Check if you want to log slow views in New Relic as custom events.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('views_log_slow'),
+    ];
+
+    $form['views']['views_log_threshold'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Slow view threshold'),
+      '#field_suffix' => 'ms',
+      '#description' => $this->t('The amount of time in milliseconds before a slow view event is logged in New Relic.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('views_log_threshold'),
+    ];
+
     $form['error'] = [
       '#type' => 'details',
       '#title' => t('Error tracking'),
@@ -186,6 +207,8 @@ class NewRelicRpmSettings extends ConfigFormBase {
       'override_exception_handler',
       'module_deployment',
       'config_import',
+      'views_log_slow',
+      'views_log_threshold',
       'disable_autorum',
     ];
 
