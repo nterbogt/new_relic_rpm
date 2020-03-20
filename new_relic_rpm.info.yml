@@ -1,7 +1,7 @@
 name: 'New Relic RPM'
 description: 'Integration with the New Relic reporting and optimization system.'
 core: 8.x
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8.5 || ^9
 type: module
 configure: new_relic_rpm.settings
 dependencies:
