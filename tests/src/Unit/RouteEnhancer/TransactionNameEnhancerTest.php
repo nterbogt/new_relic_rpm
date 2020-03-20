@@ -8,6 +8,7 @@ use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -32,12 +33,13 @@ class TransactionNameEnhancerTest extends UnitTestCase {
   public function testEnhance() {
     $request = new Request();
     $callback = [self::class, 'transactionNameCallback'];
-    $resolver = $this->prophesize(ControllerResolverInterface::class);
-    $resolver->getControllerFromDefinition($callback)->willReturn($callback);
-    $resolver->getArguments(Argument::type(Request::class), $callback)
+    $controller_resolver = $this->prophesize(ControllerResolverInterface::class);
+    $controller_resolver->getControllerFromDefinition($callback)->willReturn($callback);
+    $argument_resolver = $this->prophesize(ArgumentResolverInterface::class);
+    $argument_resolver->getArguments(Argument::type(Request::class), $callback)
       ->willReturn([]);
 
-    $enhancer = new TransactionNameEnhancer($resolver->reveal());
+    $enhancer = new TransactionNameEnhancer($controller_resolver->reveal(), $argument_resolver->reveal());
 
     $defaults = [
       RouteObjectInterface::ROUTE_OBJECT => new Route('/foo', ['_transaction_name_callback' => $callback]),

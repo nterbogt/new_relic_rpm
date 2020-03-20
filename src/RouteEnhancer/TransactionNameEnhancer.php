@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\Core\Routing\EnhancerInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 
 /**
  * Enhances routes with a dynamic transaction name.
@@ -30,7 +30,7 @@ class TransactionNameEnhancer implements EnhancerInterface {
   /**
    * Constructor.
    */
-  public function __construct(ControllerResolverInterface $controller_resolver, ArgumentResolver $argument_resolver) {
+  public function __construct(ControllerResolverInterface $controller_resolver, ArgumentResolverInterface $argument_resolver) {
     $this->controllerResolver = $controller_resolver;
     $this->argumentResolver = $argument_resolver;
   }
