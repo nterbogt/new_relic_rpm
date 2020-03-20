@@ -5,7 +5,6 @@ namespace Drupal\new_relic_rpm\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\RfcLogLevel;
-use Drupal\Core\Render\Element;
 
 /**
  * Provides a settings form to configure the New Relic RPM module.
@@ -39,13 +38,13 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('new_relic_rpm.settings')->get('api_key'),
     ];
 
-    $form['server'] = [
+    $form['transactions'] = [
       '#type' => 'details',
-      '#title' => t('Server tracking (APM)'),
+      '#title' => t('Transactions'),
       '#open' => TRUE,
     ];
 
-    $form['server']['track_drush'] = [
+    $form['transactions']['track_drush'] = [
       '#type' => 'select',
       '#title' => $this->t('Drush transactions'),
       '#description' => $this->t('How do you wish New Relic to track drush commands?'),
@@ -57,7 +56,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => $this->config('new_relic_rpm.settings')->get('track_drush'),
     ];
 
-    $form['server']['track_cron'] = [
+    $form['transactions']['track_cron'] = [
       '#type' => 'select',
       '#title' => $this->t('Cron transactions'),
       '#description' => $this->t('How do you wish New Relic to track cron tasks?'),
@@ -70,16 +69,16 @@ class NewRelicRpmSettings extends ConfigFormBase {
     ];
 
     $roles = user_role_names();
-    $form['server']['ignore_roles'] = [
+    $form['transactions']['ignore_roles'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
-      '#title' => $this->t('Ignore Roles'),
+      '#title' => $this->t('Ignore roles'),
       '#description' => $this->t('Select roles that you wish to be ignored on the New Relic dashboards. Any user with at least one of the selected roles will be ignored.'),
       '#options' => $roles,
       '#default_value' => $this->config('new_relic_rpm.settings')->get('ignore_roles'),
     ];
 
-    $form['server']['ignore_urls'] = [
+    $form['transactions']['ignore_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
       '#title' => $this->t('Ignore URLs'),
@@ -87,7 +86,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => $this->config('new_relic_rpm.settings')->get('ignore_urls'),
     ];
 
-    $form['server']['bg_urls'] = [
+    $form['transactions']['bg_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
       '#title' => $this->t('Background URLs'),
@@ -95,7 +94,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => $this->config('new_relic_rpm.settings')->get('bg_urls'),
     ];
 
-    $form['server']['exclusive_urls'] = [
+    $form['transactions']['exclusive_urls'] = [
       '#type' => 'textarea',
       '#wysiwyg' => FALSE,
       '#title' => $this->t('Exclusive URLs'),
@@ -103,30 +102,9 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => $this->config('new_relic_rpm.settings')->get('exclusive_urls'),
     ];
 
-    $form['views'] = [
-      '#type' => 'details',
-      '#title' => t('Views tracking'),
-      '#open' => TRUE,
-    ];
-
-    $form['views']['views_log_slow'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Track slow views'),
-      '#description' => $this->t('Check if you want to log slow views in New Relic as custom events.'),
-      '#default_value' => $this->config('new_relic_rpm.settings')->get('views_log_slow'),
-    ];
-
-    $form['views']['views_log_threshold'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Slow view threshold'),
-      '#field_suffix' => 'ms',
-      '#description' => $this->t('The amount of time in milliseconds before a slow view event is logged in New Relic.'),
-      '#default_value' => $this->config('new_relic_rpm.settings')->get('views_log_threshold'),
-    ];
-
     $form['error'] = [
       '#type' => 'details',
-      '#title' => t('Error tracking'),
+      '#title' => t('Error analytics'),
       '#open' => TRUE,
     ];
 
@@ -148,7 +126,7 @@ class NewRelicRpmSettings extends ConfigFormBase {
 
     $form['deployment'] = [
       '#type' => 'details',
-      '#title' => t('Deployment tracking'),
+      '#title' => t('Deployments'),
       '#open' => TRUE,
     ];
 
@@ -174,17 +152,38 @@ class NewRelicRpmSettings extends ConfigFormBase {
       '#default_value' => (int) $this->config('new_relic_rpm.settings')->get('config_import'),
     ];
 
-    $form['rum'] = [
+    $form['browser'] = [
       '#type' => 'details',
-      '#title' => t('Real User Monitoring (RUM)'),
+      '#title' => t('Browser'),
       '#open' => TRUE,
     ];
 
-    $form['rum']['disable_autorum'] = [
+    $form['browser']['disable_autorum'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable AutoRUM'),
       '#description' => $this->t('Check to disable the automatic real user monitoring inserted by a New Relic transaction.'),
       '#default_value' => $this->config('new_relic_rpm.settings')->get('disable_autorum'),
+    ];
+
+    $form['insights'] = [
+      '#type' => 'details',
+      '#title' => t('Insights'),
+      '#open' => TRUE,
+    ];
+
+    $form['insights']['views_log_slow'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Track slow views'),
+      '#description' => $this->t('Check if you want to log slow views in New Relic as custom events.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('views_log_slow'),
+    ];
+
+    $form['insights']['views_log_threshold'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Slow view threshold'),
+      '#field_suffix' => 'ms',
+      '#description' => $this->t('The amount of time in milliseconds before a slow view event is logged in New Relic.'),
+      '#default_value' => $this->config('new_relic_rpm.settings')->get('views_log_threshold'),
     ];
 
     return parent::buildForm($form, $form_state);
