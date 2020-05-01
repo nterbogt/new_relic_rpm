@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\Core\Routing\EnhancerInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
 
 /**
  * Enhances routes with a dynamic transaction name.
@@ -17,13 +18,21 @@ class TransactionNameEnhancer implements EnhancerInterface {
    *
    * @var \Drupal\Core\Controller\ControllerResolverInterface
    */
-  private $resolver;
+  private $controllerResolver;
+
+  /**
+   * Argument resolver service.
+   *
+   * @var \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
+   */
+  private $argumentResolver;
 
   /**
    * Constructor.
    */
-  public function __construct(ControllerResolverInterface $resolver) {
-    $this->resolver = $resolver;
+  public function __construct(ControllerResolverInterface $controller_resolver, ArgumentResolverInterface $argument_resolver) {
+    $this->controllerResolver = $controller_resolver;
+    $this->argumentResolver = $argument_resolver;
   }
 
   /**
@@ -38,13 +47,13 @@ class TransactionNameEnhancer implements EnhancerInterface {
     }
 
     $cb = $route->getDefault('_transaction_name_callback');
-    $callable = $this->resolver->getControllerFromDefinition($cb);
+    $callable = $this->controllerResolver->getControllerFromDefinition($cb);
 
     // Clone the request so we can set the attributes now.  Otherwise,
     // attributes aren't populated until after the route is enhanced.
     $cloned = clone $request;
     $cloned->attributes->replace($defaults);
-    $arguments = $this->resolver->getArguments($cloned, $callable);
+    $arguments = $this->argumentResolver->getArguments($cloned, $callable);
     $defaults['_transaction_name'] = call_user_func_array($callable, $arguments);
 
     return $defaults;
